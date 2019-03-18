@@ -1,0 +1,72 @@
+#authority .el-table td,
+.el-table th {
+  padding: 6px 0 !important;
+  font-size: 12px;
+}
+
+#authority .el-table th>.cell,
+#authority .el-table .cell {
+  text-align: center;
+}
+
+#authority .el-dialog__header {
+  padding: 20px 20px 0px !important;
+}
+
+#authority .dialog-top .el-input__inner {
+  height: 35px !important;
+  line-height: 35px;
+}
+
+#authority .el-dialog__body {
+  padding: 0 20px;
+}
+
+#authority .el-dialog__title {
+  font-size: 16px !important;
+  color: #606266 !important;
+}
+
+#VolunteerTime .el-table td,
+.el-table th {
+  padding: 6px 0 !important;
+  font-size: 12px;
+}
+
+#VolunteerTime .el-table th>.cell,
+#VolunteerTime .el-table .cell {
+  text-align: center;
+}
+
+#VolunteerTime .search-item .el-input__inner {
+  width: 180px;
+  height: 37px;
+}
+
+#Star .el-table td,
+.el-table th {
+  padding: 6px 0 !important;
+  font-size: 12px;
+}
+
+#Star .el-table th>.cell,
+#Star .el-table .cell {
+  text-align: center;
+}
+
+#Star .search-item .el-input__inner {
+  width: 180px;
+  height: 37px;
+}
+
+#condition .formula .el-input__inner {
+  padding: 0 10px;
+}
+
+#publish .el-input__inner {
+  width: 200px;
+}
+
+#home .el-aside {
+  background-color: rgb(84, 92, 100);
+}
