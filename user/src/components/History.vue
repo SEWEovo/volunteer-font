@@ -5,13 +5,16 @@
         <el-row v-for="(item,index ) in datalist" :key="index">
           <el-card :body-style="{ padding: '0px' }">
             <div class="header-title">
-              <span>{{item.name}}</span>
-              <el-button style="float: right;padding:2px" type="text">参与成功</el-button>
+              <span>{{item.activityName}}</span>
+              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===0">报名成功</el-button>
+              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===1">进行中</el-button>
+              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===2">参与成功</el-button>
+              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===-1">报名但未参加</el-button>
             </div>
             <div class="des">
-              <p>参与年份: {{ item.time }}年</p>
-              <p>参与时长: {{ item.long }}小时</p>
-              <p>志愿评价: {{ item.assess }}分</p>
+              <p>参与年份: {{ item.year }}年</p>
+              <p>参与时长: {{ item.longtime }}小时</p>
+              <p>志愿评价: {{ item.score }}分</p>
             </div>
           </el-card>
         </el-row>
@@ -28,7 +31,6 @@
         </div>
       </div>
     </div>
-    <div class="index-left"></div>
   </div>
 </template>
 
@@ -38,44 +40,29 @@ export default {
   data() {
     return {
       currentPage: 1,
-      datalist: [
-        {
-          name: "西湖志愿者活动",
-          time: "2019",
-          long: 8,
-          assess: 80
-        },
-        {
-          name: "篮球志愿者活动",
-          time: "2019",
-          long: 12,
-          assess: 80
-        },
-        {
-          name: "马拉松志愿者活动",
-          time: "2019",
-          long: 8,
-          assess: 70
-        },
-        {
-          name: "当老师志愿者活动",
-          time: "2019",
-          long: 8,
-          assess: 90
-        },
-        {
-          name: "当老师志愿者活动",
-          time: "2019",
-          long: 8,
-          assess: 90
-        },
-      ]
+      datalist: []
     }
   },
   methods: {
     handleCurrentChange: function () {
 
     },
+    getList() {
+      let params = {
+        userId: this.$store.state.login.userId
+      }
+      this.$get('http://localhost:8880/enter/getByUser', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.datalist = res.list;
+          }
+        })
+        .catch(() => {
+        })
+    },
+  },
+  mounted() {
+    this.getList();
   }
 }
 </script>
@@ -97,12 +84,6 @@ export default {
   height: auto;
   background-color: white;
   padding: 20px;
-}
-.index-left {
-  flex: 1 1;
-  font-size: 14px;
-  background-color: white;
-  height: 300px;
 }
 .list-item {
   margin-bottom: 0;

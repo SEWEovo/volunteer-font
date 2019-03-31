@@ -14,25 +14,25 @@
             <el-form-item label="姓名" prop="name">
               <el-input v-model="peopelData.name" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="学号" prop="number">
-              <el-input v-model="peopelData.number" :disabled="true"></el-input>
+            <el-form-item label="学号" prop="userId">
+              <el-input v-model="peopelData.userId" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="学院" prop="college">
-              <el-input v-model.number="peopelData.college" :disabled="true"></el-input>
+              <el-input v-model="peopelData.college" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="专业" prop="profession">
               <el-input v-model="peopelData.profession" :disabled="true"></el-input>
             </el-form-item>
-            <el-form-item label="班级" prop="class">
-              <el-input v-model.number="peopelData.class" :disabled="true"></el-input>
+            <el-form-item label="班级" prop="classNum">
+              <el-input v-model="peopelData.classNum" :disabled="true"></el-input>
             </el-form-item>
             <el-form-item label="联系电话" prop="phone">
-              <el-input v-model.number="peopelData.phone"></el-input>
+              <el-input v-model="peopelData.phone" :disabled="phoneDis"></el-input>
             </el-form-item>
           </el-form>
           <div class="btns">
-            <el-button type>编辑</el-button>
-            <el-button type>保存</el-button>
+            <el-button type @click="edit">编辑</el-button>
+            <el-button type @click="save">保存</el-button>
           </div>
         </div>
       </div>
@@ -57,7 +57,6 @@
         </div>
       </div>
     </div>
-    <div class="index-left"></div>
   </div>
 </template>
 <script>
@@ -65,14 +64,8 @@ export default {
   name: 'basic',
   data() {
     return {
-      peopelData: {
-        name: "顾梦佳",
-        number: "1150299190",
-        college: "信息与电子工程学院",
-        profession: "软件工程",
-        class: "151",
-        phone: "13957541768",
-      },
+      phoneDis: true,
+      peopelData: {},
       datalist: [
         {
           year: "2018",
@@ -106,6 +99,39 @@ export default {
     }
   },
   methods: {
+    getInfo() {
+      let params = {
+        userId: this.$store.state.login.userId
+      }
+      this.$get('http://localhost:8880/user/findOneInfo', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.peopelData = res.data;
+          }
+        })
+        .catch(() => {
+        })
+    },
+    edit() {
+      this.phoneDis = false;
+    },
+    save() {
+      let params = {
+        userId: this.$store.state.login.userId,
+        phone: this.peopelData.phone
+      }
+      this.$post('http://localhost:8880/user/updateInfo', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.phoneDis = true;
+          }
+        })
+        .catch(() => {
+        })
+    }
+  },
+  mounted() {
+    this.getInfo();
   }
 }
 </script>

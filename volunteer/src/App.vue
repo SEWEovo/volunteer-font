@@ -14,10 +14,8 @@ export default {
   methods: {
   },
   created() {
-    console.log(this.$store.state.login.username)
-    if (this.$store.state.login.username == null) {
+    if (this.$store.state.login.username != null) {
       this.$router.push("/Home")
-
     } else {
       this.$router.push("/Login")
     }

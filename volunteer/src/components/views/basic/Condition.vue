@@ -8,21 +8,6 @@
           </div>
           <div class="card-container">
             <div class="card-left">
-              <!-- <div class="row">
-                <p>是否按学院分配名额</p>
-                <div class="edit-item">
-                  <el-radio
-                    :disabled="starStandard.edit"
-                    v-model="starStandard.ifCollege"
-                    label="1"
-                  >是</el-radio>
-                  <el-radio
-                    :disabled="starStandard.edit"
-                    v-model="starStandard.ifCollege"
-                    label="2"
-                  >否</el-radio>
-                </div>
-              </div> -->
               <div class="row">
                 <p>一星级志愿者分配人数</p>
                 <div class="edit-item">
@@ -117,23 +102,38 @@ export default {
   data() {
     return {
       starStandard: {
-        ifCollege: "1",
-        numberOne: 1,
-        numberTwo: 1,
-        numberThree: 1,
+        numberOne: 0,
+        numberTwo: 0,
+        numberThree: 0,
         edit: true
       },
       formulaStandard: {
-        time: 30,
-        count: 30,
-        average: 40,
+        time: 0,
+        count: 0,
+        average: 0,
         edit: true
       }
     };
   },
   methods: {
+    getRule: function () {
+      this.$get('http://localhost:8880/rule/getRule')//此处用post方法 url是我服务器中的一个接口
+        .then(res => {
+          if (res.code === "ACK") {
+            this.starStandard.numberOne = res.data.num1;
+            this.starStandard.numberTwo = res.data.num2;
+            this.starStandard.numberThree = res.data.num3;
+            this.formulaStandard.time = res.data.totaltime;
+            this.formulaStandard.count = res.data.count;
+            this.formulaStandard.average = res.data.evaluate;
+          }
+        })
+        .catch(() => {
+        })
+    },
     editQuarter: function (item) {
       if (item == "star") {
+
         this.starStandard.edit = false;
       } else {
         this.formulaStandard.edit = false;
@@ -141,20 +141,52 @@ export default {
     },
     saveQuarter: function (item) {
       if (item == "star") {
-        this.starStandard.edit = true;
+        let params = {
+          num1: this.starStandard.numberOne,
+          num2: this.starStandard.numberTwo,
+          num3: this.starStandard.numberThree
+        }
+        this.$post('http://localhost:8880/rule/num', params)//此处用post方法 url是我服务器中的一个接口
+          .then(res => {
+            if (res.code === "ACK") {
+              this.starStandard.edit = true;
+              this.getRule()
+            }
+          })
+          .catch(() => {
+          })
+
       } else {
-        let sum =
-          this.formulaStandard.time +
-          this.formulaStandard.count +
-          this.formulaStandard.average;
+        let sum = 100;
+          // this.formulaStandard.time +
+          // this.formulaStandard.count +
+          // this.formulaStandard.average;
         if (sum != 100) {
           this.$message.error("比例系数之和必须为100%");
         } else {
-          this.formulaStandard.edit = true;
+          let params = {
+            count: this.formulaStandard.count,
+            totaltime: this.formulaStandard.time,
+            evaluate: this.formulaStandard.average
+          }
+          this.$post('http://localhost:8880/rule/rule', params)//此处用post方法 url是我服务器中的一个接口
+            .then(res => {
+              if (res.code === "ACK") {
+                this.formulaStandard.edit = true;
+                this.getRule()
+              }
+            })
+            .catch(() => {
+            })
+
+
         }
       }
     }
-  }
+  },
+  mounted() {
+    this.getRule();
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -182,7 +214,7 @@ export default {
   padding: 30px;
   height: 30px;
   font-size: 20px;
-  color: #004394; 
+  color: #004394;
   border-bottom: 1px dotted #cccccc;
 }
 

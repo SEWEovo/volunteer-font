@@ -12,7 +12,7 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;char
 Vue.prototype.$static = ''
 
 // 配置接口地址
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'http://localhost:8880'
 var loadingInstance
 // POST传参序列化(添加请求拦截器)
 axios.interceptors.request.use(
@@ -37,7 +37,7 @@ axios.interceptors.request.use(
 // 返回状态判断(添加响应拦截器)
 axios.interceptors.response.use(
   res => {
-    if (res.data.code === 200) {
+    if (res.data.code === "ACK") {
       loadingInstance.close()
       return res
     } else {

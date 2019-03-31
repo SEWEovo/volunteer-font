@@ -52,6 +52,6 @@ export default {
 .el-main {
   height: auto;
   padding-bottom: 10px;
-  height: 900px;
+  height: 1000px;
 }
 </style>

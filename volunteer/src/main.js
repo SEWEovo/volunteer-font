@@ -11,7 +11,7 @@ import Blob from './excel/Blob.js'
 import Export2Excel from './excel/Export2Excel.js'
 import {
   fetchGet,
-  fetchPost
+  fetchPost,
 } from './axios/index'
 Vue.config.productionTip = false
 
@@ -19,6 +19,8 @@ Vue.config.productionTip = false
 //定义全局变量
 Vue.prototype.$get = fetchGet
 Vue.prototype.$post = fetchPost
+
+
 Vue.use(ElementUI)
 /* eslint-disable no-new */
 new Vue({

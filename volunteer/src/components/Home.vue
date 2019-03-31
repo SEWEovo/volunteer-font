@@ -5,7 +5,7 @@
         <div class="title">志愿信息发布平台</div>
         <div class="user-info">
           欢迎,
-          <span>顾梦佳</span>
+          <span>{{userName}}</span>
           <a @click="logOut">退出登录</a>
         </div>
       </el-header>
@@ -66,7 +66,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      // msg:"123",
+      userName:this.$store.state.login.username,
     }
   },
   methods: {
@@ -74,9 +74,17 @@ export default {
       this.$router.push({ name: rout })
     },
     logOut() {
+      this.$store.commit("username", "");
+      this.$store.commit("userId", "");
+      this.$store.commit("phone", "");
+      this.$store.commit("type", "");
+      this.$router.push("/login")
 
     },
-  }
+  },
+  mounted() {
+    console.log(this.$store.state)
+  },
 }
 </script>
 
@@ -94,11 +102,10 @@ export default {
 .colo {
   position: absolute;
   left: 0;
-  top:88px;
+  top: 88px;
   width: 300px;
-   background-color: rgb(84, 92, 100);
-   height:849px;
-
+  background-color: rgb(84, 92, 100);
+  height: 849px;
 }
 .title {
   color: #004394;

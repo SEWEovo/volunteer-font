@@ -29,15 +29,15 @@
               style="width: 100%"
             >
               <el-table-column type="index" width="60"></el-table-column>
-              <el-table-column property="number" label="学号"></el-table-column>
+              <el-table-column property="userId" label="学号"></el-table-column>
               <el-table-column property="name" label="姓名"></el-table-column>
               <el-table-column property="college" label="学院"></el-table-column>
               <el-table-column property="profession" label="专业"></el-table-column>
-              <el-table-column property="grade" label="年级"></el-table-column>
+              <el-table-column property="classNum" label="年级"></el-table-column>
               <el-table-column property="phone" label="联系方式"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button type="danger" class="delete-btn" @click="revoke(scope.row.id)">撤销权限</el-button>
+                  <el-button type="danger" class="delete-btn" @click="revoke(scope.row.userId)">删除权限</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -62,9 +62,9 @@
                 :class=" choosePeople==item.number? 'listcontainer-active':'listcontainer'"
                 :key="item.index"
               >
-                <div class="people-list" @click="choose(item.number)">
+                <div class="people-list" @click="choose(item.userId)">
                   <div>{{item.name}}</div>
-                  <div>{{item.number}}</div>
+                  <div>{{item.userId}}</div>
                   <div>{{item.college}}</div>
                 </div>
               </div>
@@ -95,67 +95,8 @@ export default {
       activeNumber: "",
       ifActive: true,
       choosePeople: -1,
-      peopleData: [
-        {
-          number: "1150299192",
-          name: "王小虎",
-          college: "信息学院"
-        },
-        {
-          number: "1150299191",
-          name: "王小虎",
-          college: "信息与电子工程学院"
-        },
-        {
-          number: "1150299193",
-          name: "王小虎",
-          college: "信息学院"
-        },
-        {
-          number: "1150292192",
-          name: "王小虎",
-          college: "信息学院"
-        },
-        {
-          number: "1150219192",
-          name: "王小虎",
-          college: "信息学院"
-        }
-      ],
-      tableData: [
-        {
-          number: "1150299192",
-          name: "王小虎",
-          college: "信息学院",
-          profession: "软件工程",
-          grade: "2015级",
-          phone: "123123412321 "
-        },
-        {
-          number: "1150299192",
-          name: "王小虎",
-          college: "信息学院",
-          profession: "软件工程",
-          grade: "2015级",
-          phone: "123123412321 "
-        },
-        {
-          number: "1150299192",
-          name: "王小虎",
-          college: "信息学院",
-          profession: "软件工程",
-          grade: "2015级",
-          phone: "123123412321 "
-        },
-        {
-          number: "1150299192",
-          name: "王小虎",
-          college: "信息学院",
-          profession: "软件工程",
-          grade: "2015级",
-          phone: "123123412321 "
-        }
-      ],
+      peopleData: [],
+      tableData: [],
       options: [
         {
           value: 1,
@@ -168,9 +109,32 @@ export default {
       ]
     };
   },
+  created() {
+     this.getList();
+  },
   methods: {
+    //获取权限列表
+     getList: function () {
+      this.$get('http://localhost:8880/user/selectPermissionStudent')
+        .then(res => {
+          if (res.code === "ACK") {
+            this.tableData = res.data;
+          }
+        })
+        .catch(() => {
+        })
+    },
     add: function () {
-      this.addVisible = true;
+      this.$get('http://localhost:8880/user/selectAll')
+        .then(res => {
+          if (res.code === "ACK") {
+            this.peopleData = res.data;
+            this.addVisible = true;
+          }
+        })
+        .catch(() => {
+        })
+
     },
     onExport: function () { },
     searchHas: function () {
@@ -180,29 +144,39 @@ export default {
         console.log("搜索姓名");
       }
     },
-    revoke: function () {
+    revoke: function (id) {
       this.$confirm("确定撤销该对象的权限?", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "撤销成功!"
-          });
+          let params = {
+            userId: id
+          }
+          this.$post('http://localhost:8880/user/del', params)//此处用post方法 url是我服务器中的一个接口
+            .then(res => {
+              if (res.code === "ACK") {
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.getList();
+              }
+            })
+            .catch(() => {
+            })
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消撤销"
+            message: "已取消删除"
           });
         });
     },
     choose: function (number) {
       this.ifActive = false;
       this.choosePeople = number;
-      console.log(this.choosePeople);
     },
     doAdd: function () {
       this.$confirm("确定为" + this.choosePeople + "添加权限?", "提示", {
@@ -211,10 +185,21 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "添加成功!"
-          });
+          let params = {
+            userId: this.choosePeople
+          }
+          this.$post('http://localhost:8880/user/add', params)//此处用post方法 url是我服务器中的一个接口
+            .then(res => {
+              if (res.code === "ACK") {
+                this.$message({
+                  type: "success",
+                  message: "添加成功!"
+                });
+                this.getList();
+              }
+            })
+            .catch(() => {
+            })
           this.addVisible = false;
           this.ifActive = true;
           this.choosePeople = -1;
@@ -244,7 +229,7 @@ export default {
 }
 .table-top {
   height: 50px;
-  margin: 20px 0 0 40px;
+  width: 100%;
   .el-button {
     width: 70px;
     height: 30px;
@@ -287,7 +272,7 @@ export default {
 
 .main-table {
   width: 100%;
-  height: 690px;
+  height: 680px;
 }
 
 .bottom-table {
@@ -328,6 +313,8 @@ export default {
   width: 90%;
   height: 400px;
   border: 1px solid #cccccc;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 .listcontainer {
   background-color: white;

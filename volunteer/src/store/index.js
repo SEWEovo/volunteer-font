@@ -4,11 +4,23 @@ Vue.use(Vuex)
 const state = {
   login: {
     username: "",
+    userId:"",
+    phone:"",
+    type:"",
   }
 }
 const mutations = {
   username(state, str) {
     state.login.username = str;
+  },
+  userId(state, str) {
+    state.login.userId = str;
+  },
+  phone(state, str) {
+    state.login.phone = str;
+  },
+  type(state, str) {
+    state.login.type = str;
   },
 }
 const store = new Vuex.Store({

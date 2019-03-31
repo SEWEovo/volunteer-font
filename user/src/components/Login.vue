@@ -41,7 +41,42 @@ export default {
       this.$store.commit("loginVisible", false);
     },
     login() {
-      this.$store.commit("loginVisible", false);
+      let params = {
+        account: this.form.username,
+        password: this.form.password
+      }
+
+      this.$post('http://localhost:8880/user/login', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            let params = {
+              userId: res.data.account
+            }
+            this.$store.commit("type", res.data.type);
+            this.$get('http://localhost:8880/user/findOneInfo', params)
+              .then(res2 => {
+                if (res2.code === "ACK") {
+                  this.$store.commit("username", res2.data.name);
+                  this.$store.commit("userId", res2.data.userId);
+                  this.$store.commit("phone", res2.data.phone);
+                  this.$store.commit("college", res2.data.college);
+                  this.$store.commit("profession", res2.data.profession);
+                  this.$store.commit("classNum", res2.data.classNum);
+                  this.$store.commit("loginVisible", false);
+                }
+              })
+              .catch(() => {
+              })
+            this.$store.commit("username", res.data.account);
+            this.$store.commit("userId", res.data.userId);
+            this.$store.commit("phone", res.data.phone);
+            this.$store.commit("type", res.data.type);
+            this.$store.commit("loginVisible", false);
+          }
+        })
+        .catch(() => {
+        })
+
     }
   },
 }
