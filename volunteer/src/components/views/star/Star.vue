@@ -110,6 +110,7 @@ export default {
 <style lang="less" scoped>
 .container {
   margin: 30px;
+   height:860px;
 }
 
 .table-top {
@@ -131,7 +132,7 @@ export default {
 
 .table-container {
   width: 100%;
-  height: 750px;
+  height: 800px;
   background-color: white;
 }
 

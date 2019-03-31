@@ -30,7 +30,7 @@
           <div class="main-table">
             <el-table
               ref="singleTable"
-              height="660"
+              height="760"
               :data="tableData.slice((cur-1)*pageSize,cur*pageSize)"
               :stripe="true"
               highlight-current-row
@@ -350,6 +350,7 @@ export default {
 <style lang="less" scoped>
 .container {
   margin: 30px;
+   height:860px;
 }
 .table-top {
   width: 100%;
@@ -369,13 +370,13 @@ export default {
 
 .table-container {
   width: 100%;
-  height: 730px;
+  height: 830px;
   background-color: white;
 }
 
 .main-table {
   width: 100%;
-  height: 680px;
+  height: 780px;
 }
 
 .bottom-table {

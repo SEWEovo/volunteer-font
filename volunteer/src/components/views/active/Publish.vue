@@ -108,7 +108,7 @@ export default {
         totime: "",
         year: "",
         longtime: "",
-        welfare: ['综测加分', '包饭'],
+        welfare: [],
       },
       welfares: ['综测加分', '包饭', '包住', '交通补贴'],
     }
@@ -147,15 +147,12 @@ export default {
   background-color: #fff;
   height: auto;
 }
-
 .el-textarea {
   width: 420px;
 }
-
 .el-form-item__content {
   padding: 100px;
 }
-
 .pick-time {
   width: 400px;
   margin-left: 100px;

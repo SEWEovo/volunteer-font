@@ -40,14 +40,24 @@ export default {
         account: this.form.username,
         password: this.form.password
       }
-      this.$post('http://localhost:8880/user/login', params)//此处用post方法 url是我服务器中的一个接口
+      this.$post('http://localhost:8880/user/login', params)
         .then(res => {
           if (res.code === "ACK") {
-            this.$router.push("/Home");
-            this.$store.commit("username", res.data.account);
-            this.$store.commit("userId", res.data.userId);
-            this.$store.commit("phone", res.data.phone);
-            this.$store.commit("type", res.data.type);
+            let params = {
+              userId: res.data.account
+            }
+            this.$post('http://localhost:8880/user/findOneInfo', params)
+              .then(res2 => {
+                if (res2.code === "ACK") {
+                  this.$router.push("/Home");
+                  this.$store.commit("username", res2.data.name);
+                  this.$store.commit("userId", res.data.userId);
+                  this.$store.commit("phone", res2.data.phone);
+                  this.$store.commit("type", res.data.type);
+                }
+              })
+              .catch(() => {
+              })
           }
         })
         .catch(() => {

@@ -192,7 +192,7 @@ export default {
 <style lang="less" scoped>
 .container {
   margin: 30px;
-  height: 780px;
+  height: 860px;
   background-color: white;
 }
 .card:nth-child(1) {

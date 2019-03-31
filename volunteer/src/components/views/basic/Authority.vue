@@ -226,6 +226,7 @@ export default {
 <style lang="less" scoped>
 .container {
   margin: 30px;
+  height:860px;
 }
 .table-top {
   height: 50px;
@@ -266,13 +267,13 @@ export default {
 }
 .table-container {
   width: 100%;
-  height: 730px;
+  height: 830px;
   background-color: white;
 }
 
 .main-table {
   width: 100%;
-  height: 680px;
+  height: 780px;
 }
 
 .bottom-table {

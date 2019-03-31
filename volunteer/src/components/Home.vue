@@ -24,8 +24,8 @@
                 <i class="el-icon-location"></i>
                 <span>志愿者活动管理</span>
               </template>
-              <el-menu-item index="2-1" @click="linkTo('Publish')">志愿者活动发布</el-menu-item>
-              <el-menu-item index="2-2" @click="linkTo('History')">发布历史</el-menu-item>
+              <el-menu-item index="1-1" @click="linkTo('Publish')">志愿者活动发布</el-menu-item>
+              <el-menu-item index="1-2" @click="linkTo('History')">发布历史</el-menu-item>
             </el-submenu>
             <el-submenu index="2">
               <template slot="title">
@@ -66,7 +66,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      userName:this.$store.state.login.username,
+      userName: this.$store.state.login.username,
     }
   },
   methods: {
@@ -90,7 +90,9 @@ export default {
 
 <style lang="less" scoped>
 .index-page {
-  height: 100%;
+  height: auto;
+  background-color: rgb(84, 92, 100);
+  position: relative;
 }
 .el-header {
   background-color: #fff;
@@ -99,13 +101,8 @@ export default {
   z-index: 10;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
 }
-.colo {
-  position: absolute;
-  left: 0;
-  top: 88px;
-  width: 300px;
-  background-color: rgb(84, 92, 100);
-  height: 849px;
+.el-menu{
+ border: none;
 }
 .title {
   color: #004394;
@@ -124,11 +121,12 @@ export default {
 }
 .el-main {
   background-color: #eef1f4;
-  padding: 0;
-  position: absolute;
-  top: 80px;
-  left: 300px;
-  right: 0;
-  bottom: 0;
+  height: auto;
+  // padding: 0;
+  // position: absolute;
+  // top: 80px;
+  // left: 300px;
+  // right: 0;
+  // bottom: 0;
 }
 </style>
