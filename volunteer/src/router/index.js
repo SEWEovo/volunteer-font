@@ -16,14 +16,8 @@ import Acitivies from '@/components/views/list/Acitivies'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 
-
-
-
 Vue.use(Router)
-
-
-
-export default new Router({
+const router= new Router({
   routes: [
     //登录
     {
@@ -98,3 +92,17 @@ export default new Router({
 
   ]
 })
+    //路由判断
+//     router.beforeEach((to, from, next) => {
+//   if (to.path === "/Login") {
+//     next();
+//   } else {
+//     const username = this.$store.state.login.username;
+//     if (!username && toPath === null) {
+//       next("/Login");
+//     } else {
+//       next();
+//     }
+//   }
+// });
+export default router;

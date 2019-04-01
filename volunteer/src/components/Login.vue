@@ -46,10 +46,10 @@ export default {
             let params = {
               userId: res.data.account
             }
-            this.$post('http://localhost:8880/user/findOneInfo', params)
+            this.$get('http://localhost:8880/user/findOneInfo', params)
               .then(res2 => {
                 if (res2.code === "ACK") {
-                  this.$router.push("/Home");
+                  this.$router.push("/publish");
                   this.$store.commit("username", res2.data.name);
                   this.$store.commit("userId", res.data.userId);
                   this.$store.commit("phone", res2.data.phone);
