@@ -6,10 +6,23 @@
           <el-card :body-style="{ padding: '0px' }">
             <div class="header-title">
               <span>{{item.activityName}}</span>
-              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===0">报名成功</el-button>
+              <el-button
+                style="float: right;padding:2px"
+                type="text"
+                v-if="item.userStatus===0"
+                @click="cancle(item.enterId)"
+              >报名成功(点击可取消报名)</el-button>
               <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===1">进行中</el-button>
-              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===2">参与成功</el-button>
-              <el-button style="float: right;padding:2px" type="text" v-if="item.userStatus===-1">报名但未参加</el-button>
+              <el-button
+                style="float: right;padding:2px"
+                type="text"
+                v-if="item.userStatus===2"
+              >参与成功</el-button>
+              <el-button
+                style="float: right;padding:2px"
+                type="text"
+                v-if="item.userStatus===-1"
+              >报名但未参加</el-button>
             </div>
             <div class="des">
               <p>参与年份: {{ item.year }}年</p>
@@ -43,9 +56,40 @@ export default {
       datalist: []
     }
   },
+  mounted() {
+    this.getList();
+  },
   methods: {
     handleCurrentChange: function () {
 
+    },
+    //取消报名
+    cancle(id) {
+
+      this.$confirm("确定撤销该对象的权限?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let params = {
+            id: id
+          }
+          this.$post('http://localhost:8880/enter/delOne', params)
+            .then(res => {
+              if (res.code === "ACK") {
+                this.getList();
+              }
+            })
+            .catch(() => {
+            })
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消操作"
+          });
+        });
     },
     getList() {
       let params = {
@@ -54,17 +98,15 @@ export default {
       this.$get('http://localhost:8880/enter/getByUser', params)
         .then(res => {
           if (res.code === "ACK") {
-            this.datalist = res.list;
+            this.datalist = res.data;
           }
         })
         .catch(() => {
         })
     },
   },
-  mounted() {
-    this.getList();
-  }
 }
+
 </script>
 <style lang="less" scoped>
 #history {
