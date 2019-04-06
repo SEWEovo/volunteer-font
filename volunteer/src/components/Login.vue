@@ -43,26 +43,34 @@ export default {
       this.$post('http://localhost:8880/user/login', params)
         .then(res => {
           if (res.code === "ACK") {
-            let params = {
-              userId: res.data.account
+            if (res.data.type === 1) {
+              let params = {
+                userId: res.data.account
+              }
+              this.$get('http://localhost:8880/user/findOneInfo', params)
+                .then(res2 => {
+                  if (res2.code === "ACK") {
+                    this.$message({
+                      message: '登录成功',
+                      type: 'success'
+                    });
+                    this.$router.push("/publish");
+                    this.$store.commit("username", res2.data.name);
+                    this.$store.commit("userId", res.data.userId);
+                    this.$store.commit("phone", res2.data.phone);
+                    this.$store.commit("type", res.data.type);
+                  }
+                })
+                .catch(() => {
+                  this.$message.error('账户名或密码错误');
+                })
+            } else {
+              this.$router.push("/history");
+              this.$store.commit("username", "admin");
+              this.$store.commit("userId", res.data.userId);
+              this.$store.commit("type", res.data.type);
             }
-            this.$get('http://localhost:8880/user/findOneInfo', params)
-              .then(res2 => {
-                if (res2.code === "ACK") {
-                  this.$message({
-                    message: '登录成功',
-                    type: 'success'
-                  });
-                  this.$router.push("/publish");
-                  this.$store.commit("username", res2.data.name);
-                  this.$store.commit("userId", res.data.userId);
-                  this.$store.commit("phone", res2.data.phone);
-                  this.$store.commit("type", res.data.type);
-                }
-              })
-              .catch(() => {
-                this.$message.error('账户名或密码错误');
-              })
+
           }
         })
         .catch(() => {
@@ -76,8 +84,8 @@ export default {
   position: absolute;
   height: 350px;
   width: 500px;
-  top: 200px;
-  left: 670px;
+  top: 300px;
+  left: 780px;
   .login-card {
     height: 100%;
     h1 {

@@ -7,7 +7,6 @@ import Star from '@/components/views/star/Star'
 import publishStar from '@/components/views/star/publishStar'
 import History from '@/components/views/active/History'
 import Publish from '@/components/views/active/Publish'
-import Detail from '@/components/views/active/Detail'
 import Edit from '@/components/views/active/Edit'
 
 import VolunteerTime from '@/components/views/list/VolunteerTime'
@@ -74,12 +73,6 @@ const router= new Router({
           path: '/Publish',
           name: 'Publish',
           component: Publish
-        },
-        //志愿活动详情
-        {
-          path: '/Detail',
-          name: 'Detail',
-          component: Detail
         },
         //生成当年星级志愿者
         {

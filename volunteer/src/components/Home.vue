@@ -24,7 +24,7 @@
                 <i class="el-icon-location"></i>
                 <span>志愿者活动管理</span>
               </template>
-              <el-menu-item index="1-1" @click="linkTo('Publish')"  v-if="type===2">志愿者活动发布</el-menu-item>
+              <el-menu-item index="1-1" @click="linkTo('Publish')"  v-if="type===1">志愿者活动发布</el-menu-item>
               <el-menu-item index="1-2" @click="linkTo('History')" >发布历史</el-menu-item>
             </el-submenu>
             <el-submenu index="2">
@@ -83,7 +83,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$store.state)
+
   },
 }
 </script>

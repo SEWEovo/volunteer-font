@@ -1,26 +1,26 @@
 <template>
   <div id="publish">
     <div class="container">
-      <el-form :inline="true" :model="newFrom" label-width="100px">
+      <el-form :inline="true" ref="form" :model="newFrom" label-width="100px" :rules="rules">
         <div>
-          <el-form-item label="名称">
+          <el-form-item label="名称" prop="name">
             <el-input v-model="newFrom.name"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="简介">
+        <el-form-item label="简介" prop="des">
           <el-input type="textarea" resize="none" rows="4" v-model="newFrom.des"></el-input>
         </el-form-item>
         <div>
-          <el-form-item label="志愿内容">
+          <el-form-item label="志愿内容" prop="content">
             <el-input type="textarea" resize="none" rows="4" v-model="newFrom.content"></el-input>
           </el-form-item>
         </div>
         <div>
-          <el-form-item label="地点">
+          <el-form-item label="地点" prop="place">
             <el-input v-model="newFrom.place"></el-input>
           </el-form-item>
         </div>
-        <el-form-item label="志愿时间">
+        <el-form-item label="志愿时间" prop="time">
           <el-date-picker
             v-model="newFrom.time"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -28,18 +28,18 @@
             placeholder="选择志愿时间"
           ></el-date-picker>
         </el-form-item>
-         <div>
-          <el-form-item label="志愿时长">
+        <div>
+          <el-form-item label="志愿时长" prop="longtime">
             <el-input v-model="newFrom.longtime"></el-input>
           </el-form-item>
         </div>
         <div>
-          <el-form-item label="所需人数">
+          <el-form-item label="所需人数" prop="num">
             <el-input v-model="newFrom.num"></el-input>
           </el-form-item>
         </div>
         <div>
-          <el-form-item>
+          <el-form-item prop="welfare">
             <template>
               <span class="welfare">福利</span>
               <el-checkbox-group v-model="newFrom.welfare">
@@ -48,7 +48,7 @@
             </template>
           </el-form-item>
         </div>
-        <el-form-item label="截止日期">
+        <el-form-item label="截止日期" prop="deadline">
           <el-date-picker
             v-model="newFrom.deadline"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -57,13 +57,13 @@
           ></el-date-picker>
         </el-form-item>
         <div>
-          <el-form-item label="出行方式">
+          <el-form-item label="出行方式" prop="type">
             <el-radio v-model="newFrom.type" :label="1">集体班车</el-radio>
             <el-radio v-model="newFrom.type" :label="2">自行前往</el-radio>
           </el-form-item>
         </div>
         <div>
-          <el-form-item label="集合时间">
+          <el-form-item label="集合时间" prop="totime">
             <el-date-picker
               v-model="newFrom.totime"
               value-format="yyyy-MM-dd HH:mm:ss"
@@ -73,13 +73,13 @@
           </el-form-item>
         </div>
         <div>
-          <el-form-item label="集合地点">
+          <el-form-item label="集合地点" prop="toplace">
             <el-input v-model="newFrom.toplace"></el-input>
           </el-form-item>
         </div>
         <div>
           <el-form-item class="btn-group">
-            <el-button type="primary" @click="onSubmit">提交</el-button>
+            <el-button type="primary" @click="onSubmit('form')">提交</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </div>
@@ -101,20 +101,40 @@ export default {
         time: "",
         deadline: "",
         num: "",
-        lastTime: "",
-        num: 1,
-        type: 1,
+        type: '',
         toplace: "",
         totime: "",
         year: "",
         longtime: "",
         welfare: [],
       },
+      rules: {
+        name: [{ required: true, message: "请输入活动名称", tigger: 'blue' },{mix:5,max:20,message:"长度在5-20个字符",tigger:"blue"}],
+        des: [{ required: true, message: "请输入活动简介", tigger: 'blue' },{mix:2,max:100,message:"长度在2-100个字符",tigger:"blue"}],
+        content: [{ required: true, message: "请输入志愿内容", tigger: 'blue' },{mix:2,max:100,message:"长度在2-100个字符",tigger:"blue"}],
+        place: [{ required: true, message: "请输入活动地址", tigger: 'blue' },{mix:2,max:20,message:"长度在2-20个字符",tigger:"blue"}],
+        time: [{ required: true, message: "请选择活动时间", tigger: 'blue' }],
+        deadline: [{ required: true, message: "请选择报名截止时间", tigger: 'blue' }],
+        num: [{ required: true, message: "请输入活动所需人数", tigger: 'blue' }],
+        type: [{ required: true, message: "请输入出行方式", tigger: 'blue' }],
+        toplace: [{ required: true, message: "请输入集合地点", tigger: 'blue' },{mix:2,max:20,message:"长度在2-20个字符",tigger:"blue"}],
+        totime: [{ required: true, message: "请选择集合时间", tigger: 'blue' }],
+        longtime: [{ required: true, message: "请输入活动时长", tigger: 'blue' }],
+      },
       welfares: ['综测加分', '包饭', '包住', '交通补贴'],
     }
   },
   methods: {
-    onSubmit() {
+    onSubmit(name){
+     this.$refs[name].validate((valid) => {
+          if (valid) {
+            this.publish();
+          } else {
+            return false;
+          }
+        });
+    },
+    publish() {
       let activity = {
         ...this.newFrom,
       }

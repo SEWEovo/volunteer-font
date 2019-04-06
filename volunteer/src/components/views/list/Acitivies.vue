@@ -4,7 +4,7 @@
       <div class="container">
         <div class="table-top">
           <!-- @change="$set(ruleForm, ruleForm.article, $event)" -->
-          <el-select v-model="value8" filterable placeholder="请选择活动名称" @change="change">
+          <el-select v-model="value8" filterable placeholder="请选择活动名称" @change="change" style="width:300px">
             <el-option
               v-for="item in options"
               :key="item.activitesId"
@@ -19,11 +19,10 @@
           <div class="main-table">
             <el-table
               ref="singleTable"
-              height="auto"
+              height="800px"
               :data="tableData.slice((cur - 1) * pageSize, cur * pageSize)"
               :stripe="true"
               highlight-current-row
-              style="width: 100%"
             >
               <el-table-column type="index" width="60"></el-table-column>
               <el-table-column property="userName" label="姓名"></el-table-column>
@@ -44,6 +43,7 @@
               </el-table-column>
             </el-table>
           </div>
+
         </div>
       </div>
     </div>
@@ -196,7 +196,9 @@ export default {
   height: 830px;
   background-color: white;
 }
-
+.el-table{
+  height: 800px;
+}
 .main-table {
   width: 100%;
   height: 780px;
