@@ -24,10 +24,13 @@
                 v-if="item.userStatus===-1"
               >报名但未参加</el-button>
             </div>
-            <div class="des">
+            <div class="des" v-if="item.userStatus===2">
               <p>参与年份: {{ item.year }}年</p>
               <p>参与时长: {{ item.longtime }}小时</p>
               <p>志愿评价: {{ item.score }}分</p>
+            </div>
+            <div class="des" v-else>
+              <p>暂无数据</p>
             </div>
           </el-card>
         </el-row>
@@ -66,7 +69,7 @@ export default {
     //取消报名
     cancle(id) {
 
-      this.$confirm("确定撤销该对象的权限?", {
+      this.$confirm("确定取消该活动的报名?", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -78,10 +81,12 @@ export default {
           this.$post('http://localhost:8880/enter/delOne', params)
             .then(res => {
               if (res.code === "ACK") {
+                this.$message.success('取消成功');
                 this.getList();
               }
             })
             .catch(() => {
+              this.$message.error('该活动已开始，请联系负责人取消');
             })
         })
         .catch(() => {

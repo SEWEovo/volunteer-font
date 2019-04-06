@@ -32,7 +32,7 @@
           <p>{{this.$store.state.login.profession}}</p>
           <p>{{this.$store.state.login.college}}{{this.$store.state.login.classNum}}</p>
           <div class="btn-group">
-            <el-button type>个人中心</el-button>
+            <el-button type @click="goRouter('basic')">个人中心</el-button>
             <el-button type @click="logOut">退出登录</el-button>
           </div>
         </div>
@@ -73,7 +73,7 @@
         <el-button @click="dialogVisible = false">取 消</el-button>
       </span>
     </el-dialog>
-    <login></login>
+    <login @show="showInfo" :data="data"></login>
   </div>
 </template>
 <script>
@@ -86,6 +86,7 @@ export default {
   data() {
     return {
       //电话号码更新flag
+      data:{},
       changeTel: false,
       dialogVisible: false,
       activitiesId: "",
@@ -94,6 +95,15 @@ export default {
     }
   },
   methods: {
+        goRouter: function (item) {
+      this.$router.push(item)
+    },
+    showInfo(data){
+     this.peopelData=data;
+    },
+       login: function () {
+      this.$store.commit("loginVisible", true);
+    },
     getList: function () {
       let params = {
         id: this.activitiesId,
@@ -128,7 +138,7 @@ export default {
     },
     signUp() {
       let info = {
-        enterId:"",
+        enterId: "",
         activitesId: this.data.activitesId,
         userId: this.$store.state.login.userId,
       }
@@ -138,6 +148,7 @@ export default {
       this.$post('http://localhost:8880/enter/insertOne', params)
         .then(res => {
           if (res.code === "ACK") {
+            this.$message.success(res.msg);
             this.dialogVisible = false;
           }
         })

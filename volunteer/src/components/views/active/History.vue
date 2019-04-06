@@ -17,7 +17,7 @@
             </p>
           </div>
           <div class="item-right">
-            <el-button @click="detail(item.activitesId)">查看详情</el-button>
+            <el-button @click="detail(item.activitesId,item.userId)">查看详情</el-button>
             <el-button>查看名单</el-button>
             <!-- <el-button @click="del(item.activitesId)">删除</el-button> -->
           </div>
@@ -66,8 +66,8 @@ export default {
     del: function () {
       this.$router.push('/listShow')
     },
-    detail: function (id) {
-      if (true) {
+    detail: function (id,user) {
+      if (user===this.$store.state.login.userId) {
         this.$router.push({
           name: 'Edit',
           params: {

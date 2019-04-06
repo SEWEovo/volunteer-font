@@ -18,7 +18,7 @@
         </div>
         <div class="item-bottom">
           <el-button type="info" @click="showDetial(item.activitesId)">查看详情</el-button>
-          <el-button type="primary" :disabled="item.status===2" @click="apply">报名</el-button>
+          <el-button type="primary" :disabled="item.status===2" @click="apply(item.activitesId)">报名</el-button>
         </div>
       </div>
       <div class="index-bottom">
@@ -28,7 +28,7 @@
             :current-page.sync="currentPage"
             :page-size="100"
             layout="total, prev, pager, next"
-            :total="1000"
+            :total="total"
           ></el-pagination>
         </div>
       </div>
@@ -45,13 +45,48 @@
           <p>{{this.$store.state.login.college}}</p>
           <p>{{this.$store.state.login.profession}}{{this.$store.state.login.classNum}}</p>
           <div class="btn-group">
-            <el-button type>个人中心</el-button>
+            <el-button type @click="goRouter('basic')">个人中心</el-button>
             <el-button type @click="logOut">退出登录</el-button>
           </div>
         </div>
       </div>
     </div>
-    <login></login>
+    <el-dialog title="请确认个人信息" :visible.sync="dialogVisible" width="30%">
+      <div class="form-data">
+        <el-form
+          :model="peopelData"
+          status-icon
+          ref="peopelData"
+          label-width="100px"
+          class="demo-ruleForm"
+        >
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="peopelData.name" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="学号" prop="number">
+            <el-input v-model="peopelData.userId" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="学院" prop="college">
+            <el-input v-model.number="peopelData.college" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="专业" prop="profession">
+            <el-input v-model="peopelData.profession" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="班级" prop="class">
+            <el-input v-model.number="peopelData.classNum" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="phone">
+            <el-input v-model.number="peopelData.phone" @change="changeTel=true"></el-input>
+            <span class="msg" v-if="changeTel">请及时在个人资料中更新联系电话</span>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="signUp">报 名</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <login @show="showInfo" :data="data"></login>
   </div>
 </template>
 <script>
@@ -63,6 +98,11 @@ export default {
   },
   data() {
     return {
+      data: {},
+      total: 0,
+      changeTel: false,
+      dialogVisible: false,
+      peopelData: {},
       currentPage: 1,
       activitiesId: "",
       status: "0",
@@ -71,6 +111,12 @@ export default {
     }
   },
   methods: {
+    goRouter: function (item) {
+      this.$router.push(item)
+    },
+    showInfo(data) {
+      this.peopelData = data;
+    },
     handleClick(tab, event) {
       this.status = tab.index;
       this.getList();
@@ -81,19 +127,36 @@ export default {
       this.$store.commit("phone", "");
       this.$store.commit("type", "");
     },
+    apply: function (id) {
+      if (this.$store.state.login.username !== "") {
+        this.dialogVisible = true;
+        this.changeTel = false;
+        this.activitiesId = id;
+      }
+      else {
+        this.$store.commit("loginVisible", true);
+      }
+    },
+    signUp() {
+      let info = {
+        enterId: "",
+        activitesId: this.activitiesId,
+        userId: this.$store.state.login.userId,
+      }
+      let params = {
+        info: JSON.stringify(info)
+      }
+      this.$post('http://localhost:8880/enter/insertOne', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.$message.success(res.msg);
+            this.dialogVisible = false;
+          }
+        })
+        .catch(() => {
+        })
+    },
     getList() {
-      //      let activity = {
-      //   ...this.newFrom,
-      // }
-      // var myDate = new Date().getFullYear();
-      // activity.welfare = activity.welfare.toString();
-      // activity.phone = "12331233";
-      // activity.userId = this.$store.state.login.userId;
-      // activity.userName = this.$store.state.login.username;
-      // activity.year = myDate;
-      // let params = {
-      //   activity: JSON.stringify(activity)
-      // }
       let status;
       status = parseInt(this.status)
       if (status === 0) {
@@ -107,6 +170,7 @@ export default {
         .then(res => {
           if (res.code === "ACK") {
             this.datalist = res.data;
+            this.total = this.datalist.length;
           }
         })
         .catch(() => {
@@ -118,20 +182,18 @@ export default {
     showDetial: function (id) {
       this.activitiesId = id;
       this.$router.push({ name: 'Detail', params: { activitiesId: this.activitiesId } })
-      // this.$router.push('/Detail')
-    },
-    apply: function () {
-      if (this.$store.state.login.userId == "") {
-        this.$store.commit("loginVisible", true);
-      } else {
-        //弹出报名对话框
-      }
     },
     login: function () {
       this.$store.commit("loginVisible", true);
     },
   },
   mounted() {
+    this.peopelData.name = this.$store.state.login.username;
+    this.peopelData.userId = this.$store.state.login.userId;
+    this.peopelData.college = this.$store.state.login.college;
+    this.peopelData.profession = this.$store.state.login.profession;
+    this.peopelData.classNum = this.$store.state.login.classNum;
+    this.peopelData.phone = this.$store.state.login.phone;
     this.getList();
   }
 }

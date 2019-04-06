@@ -70,6 +70,9 @@ export default {
   },
   methods: {
     getLast() {
+      // let params={
+      //   userId:this.$store.state.login.userId,
+      // }
       //获取最新一条数据
       this.$get("http://localhost:8880/Activities/getLast")
         .then(res => {
@@ -158,7 +161,7 @@ export default {
         ]; // 导出的表头字段名
         const list = that.excelData;
         const data = that.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "XXX活动参与者"); // 导出的表格名称，根据需要自己命名
+        export_json_to_excel(tHeader, data, this.tableData.name+ "活动参与名单"); // 导出的表格名称，根据需要自己命名
       });
     },
     formatJson(filterVal, jsonData) {

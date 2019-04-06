@@ -1,8 +1,8 @@
 <template>
   <div class="index">
     <el-carousel :interval="4000" type="card" height="580px" width="500px">
-      <el-carousel-item v-for="item in 6" :key="item">
-        <h3>{{ item }}</h3>
+      <el-carousel-item v-for="img in items" :key="img.value">
+          <img :src="'../'+img.value">
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -12,6 +12,17 @@ export default {
   name: 'Index',
   data() {
     return {
+      items:[
+        {
+          value:"assets/img/2.jpg",
+        }
+    
+        // "../assets/img/2.jpg",
+        // "../assets/img/3.jpg",
+        // "../assets/img/4.jpg",
+        // "../assets/img/timg.jpg",
+        // "../assets/img/timg.jpg",
+      ]
     }
   },
   methods: {

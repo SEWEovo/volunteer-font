@@ -32,7 +32,7 @@
           </el-form>
           <div class="btns">
             <el-button type @click="edit">编辑</el-button>
-            <el-button type @click="save">保存</el-button>
+            <el-button type @click="save" :disabled="phoneDis">保存</el-button>
           </div>
         </div>
       </div>
@@ -99,6 +99,7 @@ export default {
     }
   },
   methods: {
+    //获取个人信息
     getInfo() {
       let params = {
         userId: this.$store.state.login.userId
@@ -115,6 +116,7 @@ export default {
     edit() {
       this.phoneDis = false;
     },
+    //编辑个人电话
     save() {
       let params = {
         userId: this.$store.state.login.userId,
@@ -124,6 +126,7 @@ export default {
         .then(res => {
           if (res.code === "ACK") {
             this.phoneDis = true;
+            this.$message.success('更新成功');
           }
         })
         .catch(() => {

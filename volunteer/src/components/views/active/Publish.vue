@@ -130,6 +130,7 @@ export default {
       this.$post('http://localhost:8880/Activities/publish', params)//此处用post方法 url是我服务器中的一个接口
         .then(res => {
           if (res.code === "ACK") {
+            this.$message.success('发布成功！');
           }
         })
         .catch(() => {

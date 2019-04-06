@@ -109,6 +109,7 @@ export default {
     }
   },
   methods: {
+    //获取当前志愿者活动信息
     getList(id) {
       let params = {
         id: id,
@@ -124,8 +125,8 @@ export default {
         .catch(() => {
         })
     },
+    //编辑
     onSubmit() {
-
       let activity = {
         ...this.newFrom,
       }
@@ -141,11 +142,12 @@ export default {
       this.$post('http://localhost:8880/Activities/publish', params)
         .then(res => {
           if (res.code === "ACK") {
+            this.$message.success("编辑成功");
+            this.getList();
           }
         })
         .catch(() => {
         })
-
     },
     cancle() {
       this.$router.go(-1);

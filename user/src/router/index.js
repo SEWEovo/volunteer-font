@@ -26,7 +26,7 @@ export default new Router({
     {
       path: '/Detail',
       name: 'Detail',
-      component: Detail
+      component: Detail,
     },
     //信息公示
     {

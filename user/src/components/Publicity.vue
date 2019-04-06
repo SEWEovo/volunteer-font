@@ -29,7 +29,7 @@
             :data="tableData"
             :stripe="true"
             highlight-current-row
-            style="width: 100%"
+            style="width: 100%;height:600px;"
           >
             <el-table-column type="index" width="80" label="序号"></el-table-column>
             <el-table-column property="userId" label="学号"></el-table-column>

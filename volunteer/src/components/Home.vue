@@ -24,8 +24,8 @@
                 <i class="el-icon-location"></i>
                 <span>志愿者活动管理</span>
               </template>
-              <el-menu-item index="1-1" @click="linkTo('Publish')">志愿者活动发布</el-menu-item>
-              <el-menu-item index="1-2" @click="linkTo('History')">发布历史</el-menu-item>
+              <el-menu-item index="1-1" @click="linkTo('Publish')"  v-if="type===2">志愿者活动发布</el-menu-item>
+              <el-menu-item index="1-2" @click="linkTo('History')" >发布历史</el-menu-item>
             </el-submenu>
             <el-submenu index="2">
               <template slot="title">
@@ -40,10 +40,10 @@
                 <i class="el-icon-location"></i>
                 <span>凭证管理</span>
               </template>
-              <el-menu-item index="3-1" @click="linkTo('publishStar')">生成星级志愿者</el-menu-item>
+              <el-menu-item index="3-1" @click="linkTo('publishStar')" v-if="type===2">生成星级志愿者</el-menu-item>
               <el-menu-item index="3-2" @click="linkTo('Star')">星级志愿者</el-menu-item>
             </el-submenu>
-            <el-submenu index="4">
+            <el-submenu index="4" v-if="type===2">
               <template slot="title">
                 <i class="el-icon-setting"></i>
                 <span>基础设置</span>
@@ -67,6 +67,7 @@ export default {
   data() {
     return {
       userName: this.$store.state.login.username,
+      type:this.$store.state.login.type
     }
   },
   methods: {
@@ -79,7 +80,6 @@ export default {
       this.$store.commit("phone", "");
       this.$store.commit("type", "");
       this.$router.push("/login")
-
     },
   },
   mounted() {

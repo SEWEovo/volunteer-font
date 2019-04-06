@@ -49,6 +49,10 @@ export default {
             this.$get('http://localhost:8880/user/findOneInfo', params)
               .then(res2 => {
                 if (res2.code === "ACK") {
+                  this.$message({
+                    message: '登录成功',
+                    type: 'success'
+                  });
                   this.$router.push("/publish");
                   this.$store.commit("username", res2.data.name);
                   this.$store.commit("userId", res.data.userId);
@@ -57,6 +61,7 @@ export default {
                 }
               })
               .catch(() => {
+                this.$message.error('账户名或密码错误');
               })
           }
         })
