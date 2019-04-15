@@ -7,12 +7,17 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from './axios'
 import store from './store' //引入store
+import moment from 'moment'//日期格式处理
 import {
   fetchGet,
   fetchPost
 } from './axios/index'
 Vue.config.productionTip = false
+Vue.filter('dateformat',function(value){
 
+  return moment(value).format('YYYY-MM-DD HH:mm:ss')
+
+})
 
 //定义全局变量
 Vue.prototype.$get = fetchGet

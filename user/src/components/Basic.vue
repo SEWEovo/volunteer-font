@@ -40,19 +40,29 @@
         <p>志愿基本信息</p>
         <div class="basic-list">
           <div>
-            <span>志愿年份</span>
-            <span>志愿次数</span>
-            <span>志愿时长</span>
-            <span>志愿评价</span>
+            <span>参与年份</span>
+            <span>参与总时长</span>
+            <span>参与总次数</span>
+          </div>
+          <div v-for="(item,index) in totallist" :key="index">
+            <span>{{item.year}}</span>
+            <span>{{item.totaltime}}</span>
+            <span>{{item.times}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="basic-bottom">
+        <p>荣誉基本信息</p>
+        <div class="basic-list">
+          <div>
+            <span>获得年份</span>
             <span>获得荣誉</span>
           </div>
           <div v-for="(item,index) in datalist" :key="index">
             <span>{{item.year}}</span>
-            <span>{{item.count}}</span>
-            <span>{{item.long}}</span>
-            <span>{{item.assess}}</span>
-            <span v-if="item.award">{{item.award}}</span>
-            <span v-if="item.award=='' ">无</span>
+            <span v-if="item.level===1">一星级志愿者</span>
+            <span v-if="item.level===2">二星级志愿者</span>
+            <span v-if="item.level===3">三星级志愿者</span>
           </div>
         </div>
       </div>
@@ -66,36 +76,8 @@ export default {
     return {
       phoneDis: true,
       peopelData: {},
-      datalist: [
-        {
-          year: "2018",
-          count: 2,
-          long: 40,
-          assess: 80,
-          award: ""
-        },
-        {
-          year: "2018",
-          count: 2,
-          long: 40,
-          assess: 80,
-          award: "一星级志愿者"
-        },
-        {
-          year: "2018",
-          count: 2,
-          long: 40,
-          assess: 80,
-          award: "一星级志愿者"
-        },
-        {
-          year: "2018",
-          count: 2,
-          long: 40,
-          assess: 80,
-          award: "一星级志愿者"
-        },
-      ]
+      datalist: [],
+      totallist:[],
     }
   },
   methods: {
@@ -108,6 +90,32 @@ export default {
         .then(res => {
           if (res.code === "ACK") {
             this.peopelData = res.data;
+          }
+        })
+        .catch(() => {
+        })
+    },
+    getList(){
+     let params = {
+        userId: this.$store.state.login.userId
+      }
+      this.$get('http://localhost:8880/enter/getUserTotal', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.totallist = res.data;
+          }
+        })
+        .catch(() => {
+        })
+    },
+    getAward() {
+      let params = {
+        id: this.$store.state.login.userId
+      }
+      this.$get('http://localhost:8880/award/getByUser', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.datalist = res.data;
           }
         })
         .catch(() => {
@@ -135,6 +143,8 @@ export default {
   },
   mounted() {
     this.getInfo();
+    this.getAward();
+    this.getList();
   }
 }
 </script>
@@ -155,7 +165,7 @@ export default {
   width: 794px;
   height: auto;
   background-color: white;
-  padding: 20px;
+  padding:  10px 20px;
 }
 .index-left {
   flex: 1 1;
@@ -163,15 +173,15 @@ export default {
   background-color: white;
   height: 300px;
 }
-.basic-top {
-  border-bottom: 1px solid #d3dce6;
+.basic-bottom {
+  border-top: 1px solid #d3dce6;
 }
 .form-container {
   width: 400px;
   margin-left: 100px;
 }
 .btns {
-  margin: 50px 0 30px 100px;
+  margin: 20px 0 20px 150px;
 }
 span {
   display: inline-block;

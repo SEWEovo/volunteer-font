@@ -2,8 +2,8 @@
   <div id="history">
     <div class="index">
       <div class="list-item">
-        <el-row v-for="(item,index ) in datalist" :key="index">
-          <el-card :body-style="{ padding: '0px' }">
+        <el-row v-for="(item,index ) in datalist.slice((cur-1)*pageSize,cur*pageSize)" :key="index">
+          <el-card :body-style="{ padding: '10px 0' }">
             <div class="header-title">
               <span>{{item.activityName}}</span>
               <el-button
@@ -27,7 +27,6 @@
             <div class="des" v-if="item.userStatus===2">
               <p>参与年份: {{ item.year }}年</p>
               <p>参与时长: {{ item.longtime }}小时</p>
-              <p>志愿评价: {{ item.score }}分</p>
             </div>
             <div class="des" v-else>
               <p>暂无数据</p>
@@ -39,10 +38,10 @@
         <div class="block">
           <el-pagination
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-size="10"
+            :current-page.sync="cur"
+            :page-size="6"
             layout="total, prev, pager, next"
-            :total="10"
+            :total="total"
           ></el-pagination>
         </div>
       </div>
@@ -55,8 +54,10 @@ export default {
   name: 'history',
   data() {
     return {
-      currentPage: 1,
-      datalist: []
+      cur: 1,
+      pageSize: 6,
+      datalist: [],
+      total: 0,
     }
   },
   mounted() {
@@ -104,6 +105,7 @@ export default {
         .then(res => {
           if (res.code === "ACK") {
             this.datalist = res.data;
+            this.total = this.datalist.length;
           }
         })
         .catch(() => {
@@ -136,7 +138,7 @@ export default {
   margin-bottom: 0;
   box-shadow: none;
   position: relative;
-  height: 720px;
+  height: 800px;
 }
 .el-row {
   padding-bottom: 10px;

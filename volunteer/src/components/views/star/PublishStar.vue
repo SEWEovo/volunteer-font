@@ -11,6 +11,7 @@
         <div class="table-container">
           <div class="main-table">
             <el-table
+              height="750px"
               ref="singleTable"
               :data="tableData.slice((cur-1)*pageSize,cur*pageSize)"
               :stripe="true"
@@ -20,19 +21,14 @@
             >
               <el-table-column type="selection" width="55"></el-table-column>
               <el-table-column type="index" width="60"></el-table-column>
-              <el-table-column property="number" label="学号"></el-table-column>
+              <el-table-column property="userId" label="学号"></el-table-column>
               <el-table-column property="name" label="姓名"></el-table-column>
               <el-table-column property="college" label="学院"></el-table-column>
               <el-table-column property="profession" label="专业"></el-table-column>
-              <el-table-column property="grade" label="年级"></el-table-column>
-              <el-table-column property="phone" label="联系方式"></el-table-column>
-              <el-table-column property="range" label="等级">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.range==1">一星级</span>
-                  <span v-if="scope.row.range==2">二星级</span>
-                  <span v-if="scope.row.range==3">三星级</span>
-                </template>
-              </el-table-column>
+              <el-table-column property="classNum" label="年级"></el-table-column>
+              <el-table-column property="times" label="参与次数"></el-table-column>
+              <el-table-column property="longTime" label="参与时长"></el-table-column>
+              <el-table-column property="score" label="总分"></el-table-column>
             </el-table>
           </div>
           <div class="bottom-table">
@@ -54,60 +50,28 @@ export default {
   name: 'PublishStar',
   data() {
     return {
-      range: [
-        {
-          name: "一星级",
-          value: 1,
-        }, {
-          name: "二星级",
-          value: 2,
-        },
-        {
-          name: "三星级",
-          value: 3,
-        },
-        {
-          name: "四星级",
-          value: 4,
-        }
-      ],
+
       cur: 1,
       pageSize: 20,
-      tableData: [{
-        number: '1150299192',
-        name: '王小虎',
-        college: '信息学院',
-        profession: '软件工程',
-        grade: '2015级',
-        phone: "123123412321 ",
-        year: "1999",
-        range: -1
-
-      }, {
-        number: '1150299192',
-        name: '王小虎',
-        college: '信息学院',
-        profession: '软件工程',
-        grade: '2015级',
-        phone: "123123412321 ",
-        year: "1999",
-        range: -1
-
-      }, {
-        number: '1150299192',
-        name: '王小虎',
-        college: '信息学院',
-        profession: '软件工程',
-        grade: '2015级',
-        phone: "123123412321 ",
-        year: "1999",
-        level: "一星级",
-        range: -1
-      }],
+      tableData: [],
       multipleSelection: [],
     }
   },
   methods: {
+    getList() {
+      let params = {
+        // year:new Date().getFullYear(),
+        year:"2018"
+      }
+      this.$get('http://localhost:8880/user/getTotal', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.tableData=res.data;
+          }
+        })
+        .catch(() => {
+        })
+    },
     pubilsh: function () {
       console.log(this.multipleSelection)
     },
@@ -119,12 +83,7 @@ export default {
     }
   },
   mounted() {
-    for (var i = 0; i < 1; i++) {
-      this.tableData[i].range = 1;
-    }
-    for (var i = 1; i < 3; i++) {
-      this.tableData[i].range = 2;
-    }
+   this.getList();
   }
 
 }
@@ -132,7 +91,7 @@ export default {
 <style lang="less" scoped>
 .container {
   margin: 30px;
-    height: 860px;
+  height: 860px;
 }
 
 .table-top {
@@ -149,7 +108,7 @@ export default {
 
 .main-table {
   width: 100%;
-  height: 740px;
+  height: 760px;
 }
 
 .bottom-table {

@@ -29,7 +29,8 @@
             :data="tableData"
             :stripe="true"
             highlight-current-row
-            style="width: 100%;height:600px;"
+            height="700"
+            style="width: 100%;"
           >
             <el-table-column type="index" width="80" label="序号"></el-table-column>
             <el-table-column property="userId" label="学号"></el-table-column>
@@ -120,7 +121,7 @@ export default {
 }
 .table-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
   background-color: white;
 }
 .main-table {

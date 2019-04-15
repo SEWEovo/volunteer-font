@@ -6,12 +6,16 @@
         <el-tab-pane label="报名中" name="1"></el-tab-pane>
         <el-tab-pane label="已结束" name="2"></el-tab-pane>
       </el-tabs>
-      <div class="list-item" v-for="(item,index ) in datalist" :key="index">
+      <div
+        class="list-item"
+        v-for="(item,index ) in datalist.slice((cur-1)*pageSize,cur*pageSize)"
+        :key="index"
+      >
         <div class="item-left">
           <p class="item-name">{{item.name}}</p>
           <p class="item-content">{{item.des}}</p>
           <p class="time-bottom">
-            <span class="item-time">{{item.time}}</span>
+            <span class="item-time">{{item.time | dateformat}}</span>
             <span class="item-status" v-if="item.status===2">报名结束</span>
             <span class="item-status" v-if="item.status===1">报名中</span>
           </p>
@@ -25,8 +29,8 @@
         <div class="block">
           <el-pagination
             @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
-            :page-size="100"
+            :current-page.sync="cur"
+            :page-size="6"
             layout="total, prev, pager, next"
             :total="total"
           ></el-pagination>
@@ -100,10 +104,11 @@ export default {
     return {
       data: {},
       total: 0,
+      pageSize: 5,
       changeTel: false,
       dialogVisible: false,
       peopelData: {},
-      currentPage: 1,
+      cur: 1,
       activitiesId: "",
       status: "0",
       datalist: [],
