@@ -3,7 +3,7 @@
     <div class="index">
       <div class="container">
         <div class="table-top">
-          <span>2015年学生志愿者情况概况</span>
+          <span>{{new Date().getFullYear()}}年学生志愿者情况概况</span>
         </div>
         <div class="btns">
           <el-button type class="btn" @click="pubilsh">生成名单</el-button>
@@ -17,9 +17,7 @@
               :stripe="true"
               highlight-current-row
               style="width: 100%"
-              @selection-change="handleSelectionChange"
             >
-              <el-table-column type="selection" width="55"></el-table-column>
               <el-table-column type="index" width="60"></el-table-column>
               <el-table-column property="userId" label="学号"></el-table-column>
               <el-table-column property="name" label="姓名"></el-table-column>
@@ -29,6 +27,13 @@
               <el-table-column property="times" label="参与次数"></el-table-column>
               <el-table-column property="longTime" label="参与时长"></el-table-column>
               <el-table-column property="score" label="总分"></el-table-column>
+              <el-table-column property="level" label="等级">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.level===1">一星级</span>
+                  <span v-if="scope.row.level===2">二星级</span>
+                  <span v-if="scope.row.level===3">三星级</span>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="bottom-table">
@@ -50,40 +55,70 @@ export default {
   name: 'PublishStar',
   data() {
     return {
-
       cur: 1,
       pageSize: 20,
       tableData: [],
-      multipleSelection: [],
+      num1: 0,
+      num2: 0,
+      num3: 0
     }
   },
   methods: {
     getList() {
       let params = {
-        // year:new Date().getFullYear(),
-        year:"2018"
+        year:new Date().getFullYear(),
       }
       this.$get('http://localhost:8880/user/getTotal', params)
         .then(res => {
           if (res.code === "ACK") {
-            this.tableData=res.data;
+            this.$get('http://localhost:8880/rule/getRule')
+              .then(res2 => {
+                if (res2.code === "ACK") {
+                  this.num1 = res2.data.num1;
+                  this.num2 = res2.data.num2;
+                  this.num3 = res2.data.num3;
+                  let a = this.num1 + this.num2 + this.num3;
+                  this.tableData = res.data.slice(0, a);
+                  for (let i = 0; i < this.tableData.length; i++) {
+                    if (i <= this.num1 - 1) {
+                      this.tableData[i].level = 1;
+                    }
+                    if (i <= this.num1 + this.num2 - 1 && i >= this.num1) {
+                      this.tableData[i].level = 2;
+                    }
+                    if (i > this.num1 + this.num2 - 1) {
+                      this.tableData[i].level = 3;
+                    }
+                  }
+                }
+              })
+              .catch(() => {
+              })
           }
         })
         .catch(() => {
         })
     },
     pubilsh: function () {
-      console.log(this.multipleSelection)
+      for(var i=0;i<this.tableData.length;i++){
+        this.tableData[i].year=new Date().getFullYear();
+      }
+      let params = {
+        info: JSON.stringify(this.tableData)
+      }
+      this.$post('http://localhost:8880/award/make', params)
+        .then(res => {
+          if (res.code === "ACK") {
+             this.$message.success("发布成功");
+          }
+        })
+        .catch(() => {
+        })
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-    },
-    itemChange() {
-
-    }
+    itemChange() { }
   },
   mounted() {
-   this.getList();
+    this.getList();
   }
 
 }

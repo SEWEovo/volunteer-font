@@ -58,8 +58,8 @@
         </el-form-item>
         <div>
           <el-form-item label="出行方式" prop="type">
-            <el-radio v-model="newFrom.type" :label="1">集体班车</el-radio>
-            <el-radio v-model="newFrom.type" :label="2">自行前往</el-radio>
+            <el-radio v-model="newFrom.type" label="1">集体班车</el-radio>
+            <el-radio v-model="newFrom.type" label="2">自行前往</el-radio>
           </el-form-item>
         </div>
         <div>
@@ -109,15 +109,15 @@ export default {
         welfare: [],
       },
       rules: {
-        name: [{ required: true, message: "请输入活动名称", tigger: 'blue' },{mix:5,max:20,message:"长度在5-20个字符",tigger:"blue"}],
-        des: [{ required: true, message: "请输入活动简介", tigger: 'blue' },{mix:2,max:100,message:"长度在2-100个字符",tigger:"blue"}],
-        content: [{ required: true, message: "请输入志愿内容", tigger: 'blue' },{mix:2,max:100,message:"长度在2-100个字符",tigger:"blue"}],
-        place: [{ required: true, message: "请输入活动地址", tigger: 'blue' },{mix:2,max:20,message:"长度在2-20个字符",tigger:"blue"}],
+        name: [{ required: true, message: "请输入活动名称", tigger: 'blue' }, { mix: 5, max: 20, message: "长度在5-20个字符", tigger: "blue" }],
+        des: [{ required: true, message: "请输入活动简介", tigger: 'blue' }, { mix: 2, max: 100, message: "长度在2-100个字符", tigger: "blue" }],
+        content: [{ required: true, message: "请输入志愿内容", tigger: 'blue' }, { mix: 2, max: 100, message: "长度在2-100个字符", tigger: "blue" }],
+        place: [{ required: true, message: "请输入活动地址", tigger: 'blue' }, { mix: 2, max: 20, message: "长度在2-20个字符", tigger: "blue" }],
         time: [{ required: true, message: "请选择活动时间", tigger: 'blue' }],
         deadline: [{ required: true, message: "请选择报名截止时间", tigger: 'blue' }],
         num: [{ required: true, message: "请输入活动所需人数", tigger: 'blue' }],
         type: [{ required: true, message: "请输入出行方式", tigger: 'blue' }],
-        toplace: [{ required: true, message: "请输入集合地点", tigger: 'blue' },{mix:2,max:20,message:"长度在2-20个字符",tigger:"blue"}],
+        toplace: [{ required: true, message: "请输入集合地点", tigger: 'blue' }, { mix: 2, max: 20, message: "长度在2-20个字符", tigger: "blue" }],
         totime: [{ required: true, message: "请选择集合时间", tigger: 'blue' }],
         longtime: [{ required: true, message: "请输入活动时长", tigger: 'blue' }],
       },
@@ -125,14 +125,14 @@ export default {
     }
   },
   methods: {
-    onSubmit(name){
-     this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.publish();
-          } else {
-            return false;
-          }
-        });
+    onSubmit(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.publish();
+        } else {
+          return false;
+        }
+      });
     },
     publish() {
       let activity = {
@@ -147,10 +147,26 @@ export default {
       let params = {
         activity: JSON.stringify(activity)
       }
-      this.$post('http://localhost:8880/Activities/publish', params)//此处用post方法 url是我服务器中的一个接口
+      this.$post('http://localhost:8880/Activities/publish', params)
         .then(res => {
           if (res.code === "ACK") {
-            this.$message.success('发布成功！');
+            let info = {
+              enterId: "",
+              activitesId: res.data,
+              userId: this.$store.state.login.userId,
+            }
+            let params2 = {
+              info: JSON.stringify(info)
+            }
+            this.$post('http://localhost:8880/enter/insertOne', params2)
+              .then(res2 => {
+                if (res2.code === "ACK") {
+                  this.$message.success('发布成功！');
+                 this.$refs[form].resetFields();
+                }
+              })
+              .catch(() => {
+              })
           }
         })
         .catch(() => {

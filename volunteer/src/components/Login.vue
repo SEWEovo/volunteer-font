@@ -62,7 +62,6 @@ export default {
                   }
                 })
                 .catch(() => {
-                  this.$message.error('账户名或密码错误');
                 })
             } else {
               this.$router.push("/history");
@@ -70,10 +69,11 @@ export default {
               this.$store.commit("userId", res.data.userId);
               this.$store.commit("type", res.data.type);
             }
-
           }
+  
         })
         .catch(() => {
+            this.$message.error('账户名或密码错误');
         })
     }
   }

@@ -3,9 +3,9 @@
     <div class="index">
       <div class="container">
         <div class="table-top">
-          <el-form :inline="true"  class="demo-form-inline">
+          <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="年份">
-              <el-date-picker v-model="year" type="year" placeholder="选择年份"></el-date-picker>
+              <el-date-picker v-model="year2" type="year" placeholder="选择年份" @change="searchBy"></el-date-picker>
             </el-form-item>
           </el-form>
         </div>
@@ -24,7 +24,7 @@
               <el-table-column property="name" label="姓名"></el-table-column>
               <el-table-column property="college" label="学院"></el-table-column>
               <el-table-column property="profession" label="专业"></el-table-column>
-              <el-table-column property="classNum" label="年级"></el-table-column>d
+              <el-table-column property="classNum" label="年级"></el-table-column>
               <el-table-column property="times" label="志愿次数"></el-table-column>
               <el-table-column property="longTime" label="志愿时长"></el-table-column>
               <el-table-column property="score" label="平均评价分"></el-table-column>
@@ -51,6 +51,7 @@ export default {
   name: 'VolunteerTime',
   data() {
     return {
+      year2:"2019",
       year: "",
       quarter: 0,
       college: 0,
@@ -62,8 +63,7 @@ export default {
   methods: {
     getList() {
       let params = {
-        // year:new Date().getFullYear(),
-        year: "2018"
+        year: this.year,
       }
       this.$get('http://localhost:8880/user/getTotal', params)
         .then(res => {
@@ -75,9 +75,8 @@ export default {
         })
     },
     searchBy: function () {
-      let params = {
-        year: this.year,
-      }
+      this.year=this.year2;
+      this.getList();
     },
     handleSizeChange: function (val) {
       this.pageSize = val;
@@ -87,8 +86,9 @@ export default {
     }
 
   },
-    mounted() {
-   this.getList();
+  mounted() {
+    this.year = new Date().getFullYear();
+    this.getList();
   }
 }
 </script>

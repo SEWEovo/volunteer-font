@@ -76,13 +76,6 @@
                     maxlength="2"
                     v-model="formulaStandard.count"
                   ></el-input>
-                  <span>%+志愿评价平均值*</span>
-                  <el-input
-                    :disabled="formulaStandard.edit"
-                    size="mini"
-                    maxlength="2"
-                    v-model="formulaStandard.average"
-                  ></el-input>%
                 </div>
               </div>
             </div>
@@ -110,7 +103,6 @@ export default {
       formulaStandard: {
         time: 0,
         count: 0,
-        average: 0,
         edit: true
       }
     };
@@ -125,7 +117,6 @@ export default {
             this.starStandard.numberThree = res.data.num3;
             this.formulaStandard.time = res.data.totaltime;
             this.formulaStandard.count = res.data.count;
-            this.formulaStandard.average = res.data.evaluate;
           }
         })
         .catch(() => {
@@ -146,7 +137,7 @@ export default {
           num2: this.starStandard.numberTwo,
           num3: this.starStandard.numberThree
         }
-        this.$post('http://localhost:8880/rule/num', params)//此处用post方法 url是我服务器中的一个接口
+        this.$post('http://localhost:8880/rule/num', params)
           .then(res => {
             if (res.code === "ACK") {
               this.starStandard.edit = true;
@@ -167,9 +158,8 @@ export default {
           let params = {
             count: this.formulaStandard.count,
             totaltime: this.formulaStandard.time,
-            evaluate: this.formulaStandard.average
           }
-          this.$post('http://localhost:8880/rule/rule', params)//此处用post方法 url是我服务器中的一个接口
+          this.$post('http://localhost:8880/rule/rule', params)
             .then(res => {
               if (res.code === "ACK") {
                 this.formulaStandard.edit = true;
