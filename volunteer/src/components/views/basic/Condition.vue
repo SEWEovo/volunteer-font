@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     getRule: function () {
-      this.$get('http://localhost:8880/rule/getRule')//此处用post方法 url是我服务器中的一个接口
+      this.$get('http://localhost:8880/rule/getRule')
         .then(res => {
           if (res.code === "ACK") {
             this.starStandard.numberOne = res.data.num1;

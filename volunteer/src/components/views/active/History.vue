@@ -3,7 +3,7 @@
     <div class="index">
       <div class="container">
         <el-tabs style="height:40px;" v-model="status" @tab-click="handleClick">
-          <el-tab-pane label="全部" name="0"></el-tab-pane>
+          <el-tab-pane label="全 部" name="0"></el-tab-pane>
           <el-tab-pane label="报名中" name="1"></el-tab-pane>
           <el-tab-pane label="已结束" name="2"></el-tab-pane>
         </el-tabs>
@@ -18,8 +18,6 @@
           </div>
           <div class="item-right">
             <el-button @click="detail(item.activitesId,item.userId)">查看详情</el-button>
-            <el-button>查看名单</el-button>
-            <!-- <el-button @click="del(item.activitesId)">删除</el-button> -->
           </div>
         </div>
         <template>

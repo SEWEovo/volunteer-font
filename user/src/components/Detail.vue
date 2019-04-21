@@ -13,11 +13,12 @@
       </div>
       <div class="item">所需人数：{{data.num}}</div>
       <div class="item">志愿福利：{{data.welfare}}</div>
-      <!-- <el-tag v-for="(item,index) in data.welfares" :key="index">{{item.name}}</el-tag> -->
       <div class="item">报名截止时间：{{data.deadline  | dateformat}}</div>
+            <div class="item">发布者：{{data.userName}}</div>
+                  <div class="item">发布者联系方式：{{data.phone}}</div>
       <div class="btns">
         <el-button type="primary" @click="apply()">报名</el-button>
-        <el-button @click="cancel()">取消</el-button>
+        <el-button @click="cancel()">返回</el-button>
       </div>
     </div>
     <div class="index-left">

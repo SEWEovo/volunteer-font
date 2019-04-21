@@ -6,7 +6,7 @@
       </div>
       <div class="description">
         <p>说明: 星级志愿者分为一星级志愿者，二星级志愿者，三星级志愿者，四星级志愿者。其中一星级志愿者荣誉最高</p>
-        <p>规则: 总分=志愿时长*30%+志愿次数*30%。分值计算仅限当年</p>
+        <p>规则: 总分=志愿时长*{{time}}%+志愿次数*{{count}}%。分值计算仅限当年</p>
       </div>
       <div class="table-top">
         <div class="top-left">
@@ -58,15 +58,29 @@ export default {
   data() {
     return {
       year: new Date().getFullYear(),
+      time:"",
+      count:"",
       year2: "2019",
       tableData: [],
     }
   },
   mounted() {
     this.year = new Date().getFullYear();
-    this.getList()
+    this.getList();
+    this.getRule();
   },
   methods: {
+    getRule() {
+      this.$get('http://localhost:8880/rule/getRule')
+        .then(res => {
+          if (res.code === "ACK") {
+            this.time = res.data.totaltime;
+            this.count = res.data.count;
+          }
+        })
+        .catch(() => {
+        })
+    },
     getList() {
       let params = {
         year: this.year,

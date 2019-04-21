@@ -40,6 +40,10 @@ export default {
   },
   methods: {
     cancle() {
+      this.form = {
+        username: "",
+        password: "",
+      }
       this.$store.commit("loginVisible", false);
     },
     login() {
@@ -66,9 +70,9 @@ export default {
                   this.$store.commit("classNum", res2.data.classNum);
                   this.$store.commit("loginVisible", false);
                   this.$message.success('登录成功');
-                  this.$emit("show",res2.data);
-                  this.form.account="";
-                  this.form.password="";
+                  this.$emit("show", res2.data);
+                  this.form.account = "";
+                  this.form.password = "";
                 }
               })
               .catch(() => {

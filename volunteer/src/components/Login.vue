@@ -70,13 +70,13 @@ export default {
               this.$store.commit("type", res.data.type);
             }
           }
-  
+
         })
         .catch(() => {
-            this.$message.error('账户名或密码错误');
+          this.$message.error('账户名或密码错误');
         })
     }
-  }
+  },
 }
 </script>
 <style lang="less" scope>

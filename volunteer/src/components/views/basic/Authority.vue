@@ -6,7 +6,7 @@
           <div class="top-left">
             <el-button type="primary" icon="el-icon-plus" @click="add">添加</el-button>
           </div>
-          <div class="top-right">
+          <!-- <div class="top-right">
             <el-select v-model="searchValue" placeholder="请选择">
               <el-option
                 v-for="item in options"
@@ -17,7 +17,7 @@
             </el-select>
             <el-input v-model="searchText" placeholder="请输入内容"></el-input>
             <i class="el-icon-search" @click="searchHas"></i>
-          </div>
+          </div> -->
         </div>
         <div class="table-container">
           <div class="main-table">
