@@ -7,11 +7,15 @@
           <el-tab-pane label="报名中" name="1"></el-tab-pane>
           <el-tab-pane label="已结束" name="2"></el-tab-pane>
         </el-tabs>
-        <div class="history-item" v-for="(item,index) in datalist" :key="index">
+        <div
+          class="history-item"
+          v-for="(item,index) in datalist.slice((dataCur-1)*dataSize,dataCur*dataSize)"
+          :key="index"
+        >
           <div class="item-left">
             <p class="item-name">{{item.name}}</p>
             <p>
-              <span class="item-time">2016-09-30</span>
+              <span class="item-time">{{item.time | dateformat}}</span>
               <span class="item-status" v-if="item.status===1">报名中</span>
               <span class="item-status" v-if="item.status===2">报名结束</span>
             </p>
@@ -20,9 +24,16 @@
             <el-button @click="detail(item.activitesId,item.userId)">查看详情</el-button>
           </div>
         </div>
-        <template>
-          <div></div>
-        </template>
+        <div class="bottom-page">
+          <el-pagination
+            @size-change="dataSizeChange"
+            @current-change="dataCurrentChange"
+            :current-page="dataCur"
+            layout="total,prev, pager, next"
+            :total="datalist.length"
+            :page-size="dataSize"
+          ></el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -32,12 +43,28 @@ export default {
   name: 'history',
   data() {
     return {
+      cur: 1,
+      pageSize: 15,
+      dataCur: 1,
+      dataSize: 10,
       datalist: [],
       activitiesId: '',
       status: "0"
     }
   },
   methods: {
+        handleSizeChange: function (val) {
+      this.pageSize = val;
+    },
+    handleCurrentChange: function (val) {
+      this.cur = val;
+    },
+    dataSizeChange: function (val) {
+      this.dataSize = val;
+    },
+    dataCurrentChange: function (val) {
+      this.dataCur = val;
+    },
     handleClick(tab, event) {
       this.status = tab.index;
       this.getList();
@@ -64,8 +91,8 @@ export default {
     del: function () {
       this.$router.push('/listShow')
     },
-    detail: function (id,user) {
-      if (user===this.$store.state.login.userId) {
+    detail: function (id, user) {
+      if (user === this.$store.state.login.userId) {
         this.$router.push({
           name: 'Edit',
           params: {
@@ -101,7 +128,7 @@ export default {
 .history-item {
   position: relative;
   width: 100%;
-  height: 80px;
+  height: 77px;
   border-bottom: 1px solid #cccccc;
   overflow: hidden;
 }
@@ -135,5 +162,9 @@ export default {
     text-align: center;
     padding: 10px 0;
   }
+}
+.bottom-page{
+
+  float:right;
 }
 </style>

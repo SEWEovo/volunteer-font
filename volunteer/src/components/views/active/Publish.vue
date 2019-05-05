@@ -110,9 +110,9 @@ export default {
       },
       rules: {
         name: [{ required: true, message: "请输入活动名称", tigger: 'blue' }, { mix: 5, max: 20, message: "长度在5-20个字符", tigger: "blue" }],
-        des: [{ required: true, message: "请输入活动简介", tigger: 'blue' }, { mix: 2, max: 100, message: "长度在2-100个字符", tigger: "blue" }],
+        des: [{ required: true, message: "请输入活动简介", tigger: 'blue' }, { mix: 2, max: 200, message: "长度在2-200个字符", tigger: "blue" }],
         content: [{ required: true, message: "请输入志愿内容", tigger: 'blue' }, { mix: 2, max: 100, message: "长度在2-100个字符", tigger: "blue" }],
-        place: [{ required: true, message: "请输入活动地址", tigger: 'blue' }, { mix: 2, max: 20, message: "长度在2-20个字符", tigger: "blue" }],
+        place: [{ required: true, message: "请输入活动地址", tigger: 'blue' }, { mix: 2, max: 50, message: "长度在2-50个字符", tigger: "blue" }],
         time: [{ required: true, message: "请选择活动时间", tigger: 'blue' }],
         deadline: [{ required: true, message: "请选择报名截止时间", tigger: 'blue' }],
         num: [{ required: true, message: "请输入活动所需人数", tigger: 'blue' }],
@@ -140,7 +140,7 @@ export default {
       }
       var myDate = new Date().getFullYear();
       activity.welfare = activity.welfare.toString();
-      activity.phone = "12331233";
+      activity.phone = this.$store.state.login.phone;
       activity.userId = this.$store.state.login.userId;
       activity.userName = this.$store.state.login.username;
       activity.year = myDate;
@@ -162,7 +162,7 @@ export default {
               .then(res2 => {
                 if (res2.code === "ACK") {
                   this.$message.success('发布成功！');
-                 this.$refs[form].resetFields();
+                 this.$refs['form'].resetFields();
                 }
               })
               .catch(() => {

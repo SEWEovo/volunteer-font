@@ -5,7 +5,7 @@
         <div class="table-top">
           <el-form :inline="true" class="demo-form-inline">
             <el-form-item label="年份">
-              <el-date-picker v-model="year2" type="year" placeholder="选择年份" @change="searchBy"></el-date-picker>
+              <el-date-picker v-model="year2" type="year" value-format="yyyy" placeholder="选择年份" @change="searchBy"></el-date-picker>
             </el-form-item>
           </el-form>
         </div>

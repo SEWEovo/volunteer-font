@@ -63,14 +63,19 @@ export default {
                 })
                 .catch(() => {
                 })
-            } else {
+            } else if (res.data.type === 2) {
               this.$router.push("/history");
               this.$store.commit("username", "admin");
               this.$store.commit("userId", res.data.userId);
               this.$store.commit("type", res.data.type);
+            } else {
+              this.$message({
+                message: '您没有权限登录',
+                type: 'warning'
+              });
+              this.$refs['form'].resetFields();
             }
           }
-
         })
         .catch(() => {
           this.$message.error('账户名或密码错误');

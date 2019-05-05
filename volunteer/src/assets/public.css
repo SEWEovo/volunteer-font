@@ -70,3 +70,6 @@
 #home .el-aside {
   background-color: rgb(84, 92, 100);
 }
+#authority .el-dialog__body{
+  padding: 0px 0px !important;
+}

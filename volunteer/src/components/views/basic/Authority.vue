@@ -6,24 +6,12 @@
           <div class="top-left">
             <el-button type="primary" icon="el-icon-plus" @click="add">添加</el-button>
           </div>
-          <!-- <div class="top-right">
-            <el-select v-model="searchValue" placeholder="请选择">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-            <el-input v-model="searchText" placeholder="请输入内容"></el-input>
-            <i class="el-icon-search" @click="searchHas"></i>
-          </div> -->
         </div>
         <div class="table-container">
           <div class="main-table">
             <el-table
               ref="singleTable"
-              :data="tableData"
+              :data="tableData.slice((cur-1)*pageSize,cur*pageSize)"
               :stripe="true"
               highlight-current-row
               style="width: 100%"
@@ -46,11 +34,14 @@
             <el-pagination
               :current-page="cur"
               layout="total, prev, pager, next"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
               :total="tableData.length"
+              :page-size="pageSize"
             ></el-pagination>
           </div>
         </div>
-        <el-dialog title="添加" :visible.sync="addVisible" width="40%" :before-close="handleClose">
+        <el-dialog title="添加" :visible.sync="addVisible" width="26%" :before-close="handleClose">
           <div class="dialog-container">
             <div class="dialog-top">
               <el-input v-model="searchNumber" placeholder="请输入学号"></el-input>
@@ -58,11 +49,13 @@
             </div>
             <div class="dialog-middle">
               <div
-                v-for="item in peopleData"
-                :class=" choosePeople==item.number? 'listcontainer-active':'listcontainer'"
+                v-for="item in peopleData.slice((peopleCur-1)*peopleSize,peopleCur*peopleSize)"
                 :key="item.index"
               >
-                <div class="people-list" @click="choose(item.userId)">
+                <div
+                  :class="choosePeople==item.userId? 'people-list active':'people-list'"
+                  @click="choose(item.userId)"
+                >
                   <div>{{item.name}}</div>
                   <div>{{item.userId}}</div>
                   <div>{{item.college}}</div>
@@ -70,7 +63,14 @@
               </div>
             </div>
             <div class="dialog-bottom">
-              <el-pagination layout="prev, pager, next" :total="50"></el-pagination>
+              <el-pagination
+                @size-change="peopleSizeChange"
+                @current-change="peopleCurrentChange"
+                :current-page="peopleCur"
+                layout="total,prev, pager, next"
+                :total="peopleData.length"
+                :page-size="peopleSize"
+              ></el-pagination>
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
@@ -87,6 +87,9 @@ export default {
   data() {
     return {
       cur: 1,
+      pageSize: 15,
+      peopleCur: 1,
+      peopleSize: 10,
       searchValue: 1,
       searchText: "",
       searchNumber: -1,
@@ -110,11 +113,23 @@ export default {
     };
   },
   created() {
-     this.getList();
+    this.getList();
   },
   methods: {
+    handleSizeChange: function (val) {
+      this.pageSize = val;
+    },
+    handleCurrentChange: function (val) {
+      this.cur = val;
+    },
+    peopleSizeChange: function (val) {
+      this.peopleSize = val;
+    },
+    peopleCurrentChange: function (val) {
+      this.peopleCur = val;
+    },
     //获取权限列表
-     getList: function () {
+    getList: function () {
       this.$get('http://localhost:8880/user/selectPermissionStudent')
         .then(res => {
           if (res.code === "ACK") {
@@ -188,7 +203,7 @@ export default {
           let params = {
             userId: this.choosePeople
           }
-          this.$post('http://localhost:8880/user/add', params)//此处用post方法 url是我服务器中的一个接口
+          this.$post('http://localhost:8880/user/add', params)
             .then(res => {
               if (res.code === "ACK") {
                 this.$message({
@@ -214,7 +229,19 @@ export default {
           this.choosePeople = -1;
         });
     },
-    searchByNumber: function () { },
+    searchByNumber: function () {
+      let params = {
+        userId: this.searchNumber
+      }
+      this.$get('http://localhost:8880/user/selectById', params)
+        .then(res => {
+          if (res.code === "ACK") {
+            this.peopleData = res.data;
+          }
+        })
+        .catch(() => {
+        })
+    },
     handleClose: function () {
       this.addVisible = false;
       this.ifActive = true;
@@ -226,7 +253,7 @@ export default {
 <style lang="less" scoped>
 .container {
   margin: 30px;
-  height:860px;
+  height: 860px;
 }
 .table-top {
   height: 50px;
@@ -298,10 +325,11 @@ export default {
   .el-input {
     width: 140px;
     float: right;
+    margin-right: 10px;
   }
   .el-icon-search {
     position: absolute;
-    right: 10px;
+    right: 20px;
     top: 10px;
     font-size: 16px;
   }
@@ -310,18 +338,13 @@ export default {
   }
 }
 .dialog-middle {
-  padding: 10px 20px 0 20px;
+  padding: 20px 20px 20px 20px;
   width: 90%;
-  height: 400px;
+  height: 420px;
   border: 1px solid #cccccc;
-  overflow: scroll;
-  overflow-x: hidden;
 }
 .listcontainer {
   background-color: white;
-}
-.listcontainer-active {
-  background-color: #ecf8ff;
 }
 .people-list {
   width: 100%;
@@ -334,24 +357,25 @@ export default {
     float: left;
   }
   div:nth-child(1) {
-    text-align: left;
-    width: 80px;
+    text-align: center;
+    width: 120px;
     margin-left: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   div:nth-child(2) {
-    width: 120px;
+    width: 130px;
+    text-align: center;
     margin-right: 30px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   div:nth-child(3) {
-    width: 130px;
+    width: 120px;
     margin-right: 30px;
-    text-align: left;
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -361,9 +385,12 @@ export default {
 .people-list:hover {
   background-color: #ecf8ff;
 }
-
+.active {
+  background: #ecf8ff;
+}
 .dialog-bottom {
-  height: 30px;
+  margin-top: 10px;
+  height: 20px;
   width: 100%;
   .el-pagination {
     font-weight: 500px;

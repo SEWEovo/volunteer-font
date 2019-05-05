@@ -18,7 +18,7 @@
             ></el-option>
           </el-select>
           <el-button type class="btn" @click="onExport">导出</el-button>
-          <el-button type class="btn" :disabled="true" v-if="status==3">已结束且更新</el-button>
+          <el-button type class="btn" :disabled="true" v-if="status==2">已结束且更新</el-button>
           <el-button type class="btn" @click="update" v-else>一键更新</el-button>
         </div>
         <div class="table-container">
@@ -39,7 +39,7 @@
               <el-table-column property="phone" label="联系方式"></el-table-column>
               <el-table-column property="userStatus" label="状态" width="120px;">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.userStatus" :disabled="status==3">
+                  <el-select v-model="scope.row.userStatus" :disabled="status==2">
                     <el-option :value="0" label="报名中"></el-option>
                     <el-option :value="1" label="进行中"></el-option>
                     <el-option :value="2" label="已完成"></el-option>

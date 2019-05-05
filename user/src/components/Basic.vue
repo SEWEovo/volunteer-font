@@ -45,9 +45,11 @@
             <span>参与总次数</span>
           </div>
           <div v-for="(item,index) in totallist" :key="index">
-            <span>{{item.year}}</span>
-            <span>{{item.totaltime}}</span>
-            <span>{{item.times}}</span>
+            <div v-if="item.year != 0">
+              <span>{{item.year}}</span>
+              <span>{{item.totaltime}}</span>
+              <span>{{item.times}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +79,7 @@ export default {
       phoneDis: true,
       peopelData: {},
       datalist: [],
-      totallist:[],
+      totallist: [],
     }
   },
   methods: {
@@ -95,8 +97,8 @@ export default {
         .catch(() => {
         })
     },
-    getList(){
-     let params = {
+    getList() {
+      let params = {
         userId: this.$store.state.login.userId
       }
       this.$get('http://localhost:8880/enter/getUserTotal', params)
@@ -165,7 +167,7 @@ export default {
   width: 794px;
   height: auto;
   background-color: white;
-  padding:  10px 20px;
+  padding: 10px 20px;
 }
 .index-left {
   flex: 1 1;

@@ -13,16 +13,13 @@ export default {
   },
   methods: {
   },
-  created() {
-    if (this.$store.state.login.username != null) {
-      this.$router.push("/Home")
-    } else {
+  mounted() {
+    if (this.$store.state.login.username == null) {
       this.$router.push("/Login")
     }
   }
 }
 </script>
-
 <style lang="less" scoped>
 .index-page {
   position: absolute;
@@ -54,5 +51,4 @@ export default {
   right: 0;
   bottom: 0;
 }
-
 </style>

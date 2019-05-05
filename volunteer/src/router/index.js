@@ -2,21 +2,18 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Authority from '@/components/views/basic/Authority'
 import Condition from '@/components/views/basic/Condition'
-
 import Star from '@/components/views/star/Star'
 import publishStar from '@/components/views/star/publishStar'
 import History from '@/components/views/active/History'
 import Publish from '@/components/views/active/Publish'
 import Edit from '@/components/views/active/Edit'
-
 import VolunteerTime from '@/components/views/list/VolunteerTime'
 import Acitivies from '@/components/views/list/Acitivies'
-
 import Login from '@/components/Login'
 import Home from '@/components/Home'
 
 Vue.use(Router)
-const router= new Router({
+const router = new Router({
   routes: [
     //登录
     {
@@ -85,7 +82,7 @@ const router= new Router({
 
   ]
 })
-    //路由判断
+//路由判断
 //     router.beforeEach((to, from, next) => {
 //   if (to.path === "/Login") {
 //     next();
@@ -98,4 +95,9 @@ const router= new Router({
 //     }
 //   }
 // });
+router.beforeEach((to, from, next) => {
+
+    next();
+  
+})
 export default router;
