@@ -32,7 +32,6 @@ export default {
       this.$router.push(item)
     },
     login() {
-      console.log(1);
       this.$store.commit("loginVisible", true);
     }
   }

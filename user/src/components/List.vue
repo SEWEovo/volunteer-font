@@ -40,7 +40,7 @@
     <div class="index-left">
       <div class="login-info">
         <div class="title">欢迎,</div>
-        <div v-if="this.$store.state.login.username===''" class="login-btn">
+        <div v-if="this.$store.state.login.username==null" class="login-btn">
           <el-button type="primary" @click="login()">登录</el-button>
         </div>
         <div class="info" v-else>
@@ -200,6 +200,7 @@ export default {
     this.peopelData.classNum = this.$store.state.login.classNum;
     this.peopelData.phone = this.$store.state.login.phone;
     this.getList();
+    console.log(this.$store.state.login.username)
   }
 }
 
