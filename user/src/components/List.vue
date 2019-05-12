@@ -22,7 +22,11 @@
         </div>
         <div class="item-bottom">
           <el-button type="info" @click="showDetial(item.activitesId)">查看详情</el-button>
-          <el-button type="primary" :disabled="item.status===2" @click="apply(item.activitesId)">报名</el-button>
+          <el-button
+            type="primary"
+            :disabled="item.status===2||item.can===false"
+            @click="apply(item.activitesId)"
+          >报名</el-button>
         </div>
       </div>
       <div class="index-bottom">
@@ -95,6 +99,7 @@
 </template>
 <script>
 import Login from './Login.vue';
+import moment from "moment";
 export default {
   name: 'list',
   components: {
@@ -102,6 +107,7 @@ export default {
   },
   data() {
     return {
+      now: "",
       data: {},
       total: 0,
       pageSize: 5,
@@ -176,6 +182,16 @@ export default {
           if (res.code === "ACK") {
             this.datalist = res.data;
             this.total = this.datalist.length;
+            for (var i = 0; i < this.total; i++) {
+              this.datalist[i].deadline = moment(this.datalist[i].deadline).format('YYYY-MM-DD HH:mm:ss');
+              this.datalist[i].deadline = new Date(Date.parse(this.datalist[i].deadline));
+              if (this.datalist[i].deadline < new Date()) {
+                this.datalist[i].can = false;
+              }
+              else {
+                this.datalist[i].can = true;
+              }
+            }
           }
         })
         .catch(() => {
@@ -200,7 +216,6 @@ export default {
     this.peopelData.classNum = this.$store.state.login.classNum;
     this.peopelData.phone = this.$store.state.login.phone;
     this.getList();
-    console.log(this.$store.state.login.username)
   }
 }
 

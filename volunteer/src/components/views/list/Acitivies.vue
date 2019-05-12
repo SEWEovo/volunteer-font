@@ -41,7 +41,6 @@
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.userStatus" :disabled="status==2">
                     <el-option :value="0" label="报名中"></el-option>
-                    <el-option :value="1" label="进行中"></el-option>
                     <el-option :value="2" label="已完成"></el-option>
                     <el-option :value="-1" label="未完成"></el-option>
                   </el-select>

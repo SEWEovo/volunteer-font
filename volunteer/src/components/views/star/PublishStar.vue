@@ -6,7 +6,7 @@
           <span>{{new Date().getFullYear()}}年学生志愿者情况概况</span>
         </div>
         <div class="btns">
-          <el-button type class="btn" @click="pubilsh">生成名单</el-button>
+          <el-button type class="btn" @click="pubilsh" :disabled="can">生成名单</el-button>
         </div>
         <div class="table-container">
           <div class="main-table">
@@ -60,13 +60,14 @@ export default {
       tableData: [],
       num1: 0,
       num2: 0,
-      num3: 0
+      num3: 0,
+      can: true,
     }
   },
   methods: {
     getList() {
       let params = {
-        year:new Date().getFullYear(),
+        year: new Date().getFullYear(),
       }
       this.$get('http://localhost:8880/user/getTotal', params)
         .then(res => {
@@ -100,8 +101,8 @@ export default {
         })
     },
     pubilsh: function () {
-      for(var i=0;i<this.tableData.length;i++){
-        this.tableData[i].year=new Date().getFullYear();
+      for (var i = 0; i < this.tableData.length; i++) {
+        this.tableData[i].year = new Date().getFullYear();
       }
       let params = {
         info: JSON.stringify(this.tableData)
@@ -109,7 +110,7 @@ export default {
       this.$post('http://localhost:8880/award/make', params)
         .then(res => {
           if (res.code === "ACK") {
-             this.$message.success("发布成功");
+            this.$message.success("发布成功");
           }
         })
         .catch(() => {
@@ -119,6 +120,11 @@ export default {
   },
   mounted() {
     this.getList();
+    let time = new Date(Date.parse(new Date().getFullYear() + "-12-10"));
+    let now = new Date();
+    if (time == now) {
+      this.can = false;
+    }
   }
 
 }
