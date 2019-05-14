@@ -101,16 +101,28 @@ export default {
         })
     },
     pubilsh: function () {
-      for (var i = 0; i < this.tableData.length; i++) {
-        this.tableData[i].year = new Date().getFullYear();
-      }
       let params = {
-        info: JSON.stringify(this.tableData)
+        year: new Date().getFullYear(),
       }
-      this.$post('http://localhost:8880/award/make', params)
+      this.$get('http://localhost:8880/award/getByYear', params)
         .then(res => {
-          if (res.code === "ACK") {
-            this.$message.success("发布成功");
+          if (res.code === "ACK" && res.data.length == 0) {
+            for (var i = 0; i < this.tableData.length; i++) {
+              this.tableData[i].year = new Date().getFullYear();
+            }
+            let params = {
+              info: JSON.stringify(this.tableData)
+            }
+            this.$post('http://localhost:8880/award/make', params)
+              .then(res => {
+                if (res.code === "ACK") {
+                  this.$message.success("发布成功");
+                }
+              })
+              .catch(() => {
+              })
+          } else {
+                this.$message("不可重复发布");
           }
         })
         .catch(() => {
