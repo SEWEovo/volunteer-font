@@ -79,7 +79,7 @@
         </div>
         <div>
           <el-form-item class="btn-group">
-            <el-button type="primary" @click="onSubmit('form')">提交</el-button>
+            <el-button type="primary" @click="onSubmit('form')">发布</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </div>

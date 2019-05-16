@@ -224,7 +224,7 @@ export default {
         const tHeader = ["学号", "姓名", "学院", "专业", "年级", "联系方式"]; // 导出的表头名
         const filterVal = [
           "userId",
-          "name",
+          "userName",
           "college",
           "profession",
           "classNum",
@@ -232,7 +232,7 @@ export default {
         ]; // 导出的表头字段名
         const list = that.excelData;
         const data = that.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, this.tableData.name + "活动参与名单"); // 导出的表格名称，根据需要自己命名
+        export_json_to_excel(tHeader, data, this.tableData[0].activityName + "活动参与名单"); // 导出的表格名称，根据需要自己命名
       });
     },
     formatJson(filterVal, jsonData) {

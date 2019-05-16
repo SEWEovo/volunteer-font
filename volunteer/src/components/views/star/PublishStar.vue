@@ -3,7 +3,7 @@
     <div class="index">
       <div class="container">
         <div class="table-top">
-          <span>{{new Date().getFullYear()}}年学生志愿者情况概况</span>
+          <span>{{new Date().getFullYear()}}年可活动星级志愿者名单</span>
         </div>
         <div class="btns">
           <el-button type class="btn" @click="pubilsh" :disabled="can">生成名单</el-button>

@@ -21,10 +21,10 @@
           </p>
         </div>
         <div class="item-bottom">
-          <el-button type="info" @click="showDetial(item.activitesId)">查看详情</el-button>
+          <el-button type="info" @click="showDetial(item.activitesId,item.can)">查看详情</el-button>
           <el-button
             type="primary"
-            :disabled="item.status===2||item.can===false"
+            :disabled="item.status==2||item.can==false"
             @click="apply(item.activitesId)"
           >报名</el-button>
         </div>
@@ -44,7 +44,7 @@
     <div class="index-left">
       <div class="login-info">
         <div class="title">欢迎,</div>
-        <div v-if="this.$store.state.login.username==null" class="login-btn">
+        <div v-if="this.$store.state.login.username==''" class="login-btn">
           <el-button type="primary" @click="login()">登录</el-button>
         </div>
         <div class="info" v-else>
@@ -185,11 +185,9 @@ export default {
             for (var i = 0; i < this.total; i++) {
               this.datalist[i].deadline = moment(this.datalist[i].deadline).format('YYYY-MM-DD HH:mm:ss');
               this.datalist[i].deadline = new Date(Date.parse(this.datalist[i].deadline));
+              this.datalist[i].can = true;
               if (this.datalist[i].deadline < new Date()) {
                 this.datalist[i].can = false;
-              }
-              else {
-                this.datalist[i].can = true;
               }
             }
           }
@@ -200,9 +198,10 @@ export default {
     handleCurrentChange: function () {
 
     },
-    showDetial: function (id) {
+    showDetial: function (id, can) {
+      console.log(can)
       this.activitiesId = id;
-      this.$router.push({ name: 'Detail', params: { activitiesId: this.activitiesId } })
+      this.$router.push({ name: 'Detail', params: { activitiesId: this.activitiesId, can: can } })
     },
     login: function () {
       this.$store.commit("loginVisible", true);

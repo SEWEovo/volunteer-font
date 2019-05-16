@@ -120,6 +120,9 @@ export default {
           if (res.code === "ACK") {
             this.newFrom = res.data[0];
             this.newFrom.welfare = this.newFrom.welfare.split(",");
+            if(this.newFrom.status==2){
+              this.disable=true;
+            }
           }
         })
         .catch(() => {
@@ -139,11 +142,10 @@ export default {
       let params = {
         activity: JSON.stringify(activity)
       }
-      this.$post('http://localhost:8880/Activities/publish', params)
+      this.$post('http://localhost:8880/Activities/edit', params)
         .then(res => {
           if (res.code === "ACK") {
             this.$message.success("编辑成功");
-            this.getList();
           }
         })
         .catch(() => {

@@ -121,11 +121,5 @@ export default {
 .el-main {
   background-color: #eef1f4;
   height: auto;
-  // padding: 0;
-  // position: absolute;
-  // top: 80px;
-  // left: 300px;
-  // right: 0;
-  // bottom: 0;
 }
 </style>

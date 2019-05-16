@@ -3,7 +3,7 @@
     <div class="index">
       <div class="title">{{data.name}}</div>
       <div class="des">{{data.des}}</div>
-      <div class="item">志愿时间：{{data.time  | dateformat}}</div>
+      <div class="item">志愿时间：{{data.time | dateformat}}</div>
       <div class="item">志愿地点：{{data.place}}</div>
       <div class="item">志愿内容：{{data.content}}</div>
       <div class="item">
@@ -13,11 +13,11 @@
       </div>
       <div class="item">所需人数：{{data.num}}</div>
       <div class="item">志愿福利：{{data.welfare}}</div>
-      <div class="item">报名截止时间：{{data.deadline  | dateformat}}</div>
-            <div class="item">发布者：{{data.userName}}</div>
-                  <div class="item">发布者联系方式：{{data.phone}}</div>
+      <div class="item">报名截止时间：{{data.deadline | dateformat}}</div>
+      <div class="item">发布者：{{data.userName}}</div>
+      <div class="item">发布者联系方式：{{data.phone}}</div>
       <div class="btns">
-        <el-button type="primary" @click="apply()">报名</el-button>
+        <el-button type="primary" @click="apply()" :disabled="can==false">报名</el-button>
         <el-button @click="cancel()">返回</el-button>
       </div>
     </div>
@@ -87,22 +87,23 @@ export default {
   data() {
     return {
       //电话号码更新flag
-      data:{},
+      data: {},
       changeTel: false,
       dialogVisible: false,
       activitiesId: "",
       peopelData: {},
       data: {},
+      can:true,
     }
   },
   methods: {
-        goRouter: function (item) {
+    goRouter: function (item) {
       this.$router.push(item)
     },
-    showInfo(data){
-     this.peopelData=data;
+    showInfo(data) {
+      this.peopelData = data;
     },
-       login: function () {
+    login: function () {
       this.$store.commit("loginVisible", true);
     },
     getList: function () {
@@ -159,6 +160,7 @@ export default {
   },
   mounted() {
     this.activitiesId = this.$route.params.activitiesId;
+    this.can = this.$route.params.can;
     this.peopelData.name = this.$store.state.login.username;
     this.peopelData.userId = this.$store.state.login.userId;
     this.peopelData.college = this.$store.state.login.college;

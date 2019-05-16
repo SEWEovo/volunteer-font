@@ -69,13 +69,14 @@
                     maxlength="2"
                     v-model="formulaStandard.time"
                   ></el-input>
-                  <span>%+志愿次数*10*</span>
+                  <span>%+志愿次数*</span>
                   <el-input
                     :disabled="formulaStandard.edit"
                     size="mini"
                     maxlength="2"
                     v-model="formulaStandard.count"
                   ></el-input>
+                  <span>%</span>
                 </div>
               </div>
             </div>
@@ -141,6 +142,7 @@ export default {
           .then(res => {
             if (res.code === "ACK") {
               this.starStandard.edit = true;
+              this.$message.success("编辑成功")
               this.getRule()
             }
           })
@@ -149,9 +151,9 @@ export default {
 
       } else {
         let sum = 100;
-          // this.formulaStandard.time +
-          // this.formulaStandard.count +
-          // this.formulaStandard.average;
+        // this.formulaStandard.time +
+        // this.formulaStandard.count +
+        // this.formulaStandard.average;
         if (sum != 100) {
           this.$message.error("比例系数之和必须为100%");
         } else {
@@ -163,6 +165,7 @@ export default {
             .then(res => {
               if (res.code === "ACK") {
                 this.formulaStandard.edit = true;
+                this.$message.success("编辑成功")
                 this.getRule()
               }
             })

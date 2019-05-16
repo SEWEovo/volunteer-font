@@ -5,7 +5,13 @@
         <div class="table-top">
           <div class="search-item">
             <span>年份</span>
-            <el-date-picker v-model="year2" type="year" placeholder="选择年份" value-format="yyyy" @change="searchBy"></el-date-picker>
+            <el-date-picker
+              v-model="year2"
+              type="year"
+              placeholder="选择年份"
+              value-format="yyyy"
+              @change="searchBy"
+            ></el-date-picker>
           </div>
           <el-button type class="btn" @click="onExport">导出</el-button>
         </div>
@@ -61,7 +67,7 @@ export default {
       this.$get("http://localhost:8880/award/getByYear", params)
         .then(res => {
           if (res.code === "ACK") {
-            this.tableData = res.data;
+            this.tableData = res.data||[];
           }
         })
         .catch(() => { });
@@ -71,16 +77,21 @@ export default {
       this.getList();
     },
     onExport() {
-      this.$confirm('此操作将导出excel文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.excelData = this.tableData //你要导出的数据list。
-        this.export2Excel()
-      }).catch(() => {
+      if (this.tableData.length == 0) {
+       this.$message("当前无数据");
+      }
+      else {
+        this.$confirm('此操作将导出excel文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.excelData = this.tableData //你要导出的数据list。
+          this.export2Excel()
+        }).catch(() => {
 
-      });
+        });
+      }
     },
     export2Excel() {
       var that = this;
@@ -90,8 +101,8 @@ export default {
         const filterVal = ['userId', 'name', 'college', 'profession', 'classNum', 'year', 'level']; // 导出的表头字段名
         const list = that.excelData;
         const data = that.formatJson(filterVal, list);
-        var year=this.year;
-        export_json_to_excel(tHeader, data, year+'星级志愿者');// 导出的表格名称，根据需要自己命名
+        var year = this.year;
+        export_json_to_excel(tHeader, data, year + '年星级志愿者名单');// 导出的表格名称，根据需要自己命名
       })
     },
     formatJson(filterVal, jsonData) {

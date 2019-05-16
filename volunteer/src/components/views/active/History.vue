@@ -92,11 +92,11 @@ export default {
       this.$router.push('/listShow')
     },
     detail: function (id, user) {
-      if (user === this.$store.state.login.userId) {
+      if (user == this.$store.state.login.userId) {
         this.$router.push({
           name: 'Edit',
           params: {
-            disable: true,
+            disable: false,
             id: id
           }
         })
@@ -104,7 +104,7 @@ export default {
         this.$router.push({
           name: 'Edit',
           params: {
-            disable: false,
+            disable: true,
             id: id
           }
         })
