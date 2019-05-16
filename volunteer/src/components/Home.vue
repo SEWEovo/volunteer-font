@@ -24,8 +24,8 @@
                 <i class="el-icon-location"></i>
                 <span>志愿者活动管理</span>
               </template>
-              <el-menu-item index="1-1" @click="linkTo('Publish')"  v-if="type==1">志愿者活动发布</el-menu-item>
-              <el-menu-item index="1-2" @click="linkTo('History')" >发布历史</el-menu-item>
+              <el-menu-item index="1-1" @click="linkTo('Publish')" v-if="type==1">志愿者活动发布</el-menu-item>
+              <el-menu-item index="1-2" @click="linkTo('History')">发布历史</el-menu-item>
             </el-submenu>
             <el-submenu index="2">
               <template slot="title">
@@ -54,7 +54,9 @@
           </el-menu>
         </el-aside>
         <el-main>
-          <router-view v-if="true"></router-view>
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
         </el-main>
       </el-container>
     </el-container>
@@ -67,7 +69,7 @@ export default {
   data() {
     return {
       userName: this.$store.state.login.username,
-      type:this.$store.state.login.type
+      type: this.$store.state.login.type
     }
   },
   methods: {
@@ -100,8 +102,8 @@ export default {
   z-index: 10;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
 }
-.el-menu{
- border: none;
+.el-menu {
+  border: none;
 }
 .title {
   color: #004394;

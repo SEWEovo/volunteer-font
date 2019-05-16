@@ -42,6 +42,10 @@ const router = new Router({
           path: '/History',
           name: 'History',
           component: History,
+          meta: {
+            keepAlive: true // 需要被缓存
+          }
+      
         },
         {
           path: '/Edit',

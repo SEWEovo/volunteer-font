@@ -20,7 +20,10 @@ export default new Router({
     {
       path: '/List',
       name: 'List',
-      component: List
+      component: List,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     //志愿活动详情
     {
@@ -47,7 +50,7 @@ export default new Router({
     },
 
 
-    
+
 
   ]
 })
