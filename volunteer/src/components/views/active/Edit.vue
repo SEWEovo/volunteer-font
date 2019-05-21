@@ -39,6 +39,7 @@
             value-format="yyyy-MM-dd HH:mm:ss"
             type="datetime"
             placeholder="选择志愿时间"
+            :picker-options="pickerOptions0"
           ></el-date-picker>
         </el-form-item>
         <div>
@@ -69,6 +70,7 @@
             v-model="newFrom.deadline"
             type="datetime"
             placeholder="选择报名截止时间"
+            :picker-options="pickerOptions0"
           ></el-date-picker>
         </el-form-item>
         <div>
@@ -79,6 +81,7 @@
               value-format="yyyy-MM-dd HH:mm:ss"
               type="datetime"
               placeholder="选择集合时间"
+              :picker-options="pickerOptions0"
             ></el-date-picker>
           </el-form-item>
         </div>
@@ -102,7 +105,12 @@ export default {
   name: 'edit',
   data() {
     return {
-      disable: false,
+      pickerOptions0: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;//如果没有后面的-8.64e7就是不可以选择今天的 
+        }
+      },
+      disable: true,
       id: '',
       newFrom: {},
       welfares: ['综测加分', '包饭', '包住', '交通补贴'],
@@ -120,8 +128,8 @@ export default {
           if (res.code === "ACK") {
             this.newFrom = res.data[0];
             this.newFrom.welfare = this.newFrom.welfare.split(",");
-            if(this.newFrom.status==2){
-              this.disable=true;
+            if (this.newFrom.status == 2) {
+              this.disable = true;
             }
           }
         })
@@ -156,7 +164,6 @@ export default {
     }
   },
   mounted() {
-    this.disable = this.$route.params.disable;
     this.id = this.$route.params.id;
     this.getList(this.id);
   }

@@ -45,7 +45,7 @@
             <span>参与总次数</span>
           </div>
           <div v-for="(item,index) in totallist" :key="index">
-            <div v-if="item.year != 0">
+            <div v-if="item.year != 0 && item.year!=null">
               <span>{{item.year}}</span>
               <span>{{item.totaltime}}</span>
               <span>{{item.times}}</span>
@@ -128,19 +128,24 @@ export default {
     },
     //编辑个人电话
     save() {
-      let params = {
-        userId: this.$store.state.login.userId,
-        phone: this.peopelData.phone
+      if (this.peopelData.phone.length != 11) {
+        this.$message("手机号码有误")
+      } else {
+        let params = {
+          userId: this.$store.state.login.userId,
+          phone: this.peopelData.phone
+        }
+        this.$post('http://localhost:8880/user/updateInfo', params)
+          .then(res => {
+            if (res.code === "ACK") {
+              this.phoneDis = true;
+              this.$message.success('更新成功');
+            }
+          })
+          .catch(() => {
+          })
       }
-      this.$post('http://localhost:8880/user/updateInfo', params)
-        .then(res => {
-          if (res.code === "ACK") {
-            this.phoneDis = true;
-            this.$message.success('更新成功');
-          }
-        })
-        .catch(() => {
-        })
+
     }
   },
   mounted() {

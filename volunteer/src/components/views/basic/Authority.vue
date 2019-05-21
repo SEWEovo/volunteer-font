@@ -92,7 +92,6 @@ export default {
       peopleSize: 10,
       searchValue: 1,
       searchText: "",
-      searchNumber: -1,
       addVisible: false,
       searchNumber: "",
       activeNumber: "",
@@ -236,13 +235,14 @@ export default {
       this.$get('http://localhost:8880/user/selectById', params)
         .then(res => {
           if (res.code === "ACK") {
-            this.peopleData = res.data;
+            this.peopleData = res.data||[];
           }
         })
         .catch(() => {
         })
     },
     handleClose: function () {
+      this.searchNumber="";
       this.addVisible = false;
       this.ifActive = true;
       this.choosePeople = -1;

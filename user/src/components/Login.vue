@@ -76,18 +76,28 @@ export default {
                 }
               })
               .catch(() => {
+
               })
             this.$store.commit("username", res.data.account);
             this.$store.commit("userId", res.data.userId);
             this.$store.commit("phone", res.data.phone);
             this.$store.commit("type", res.data.type);
             this.$store.commit("loginVisible", false);
+          } else {
+
           }
         })
         .catch(() => {
+          this.$message.error("账户密码错误")
         })
 
-    }
+    },
+    mounted() {
+      this.form = {
+        username: "",
+        password: "",
+      }
+    },
   },
 }
 </script>

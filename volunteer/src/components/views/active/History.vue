@@ -53,12 +53,7 @@ export default {
     }
   },
   methods: {
-        handleSizeChange: function (val) {
-      this.pageSize = val;
-    },
-    handleCurrentChange: function (val) {
-      this.cur = val;
-    },
+
     dataSizeChange: function (val) {
       this.dataSize = val;
     },
@@ -66,6 +61,7 @@ export default {
       this.dataCur = val;
     },
     handleClick(tab, event) {
+      this.dataCur = 1;
       this.status = tab.index;
       this.getList();
     },
@@ -163,8 +159,7 @@ export default {
     padding: 10px 0;
   }
 }
-.bottom-page{
-
-  float:right;
+.bottom-page {
+  float: right;
 }
 </style>

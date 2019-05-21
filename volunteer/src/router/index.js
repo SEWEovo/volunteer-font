@@ -86,22 +86,4 @@ const router = new Router({
 
   ]
 })
-//路由判断
-//     router.beforeEach((to, from, next) => {
-//   if (to.path === "/Login") {
-//     next();
-//   } else {
-//     const username = this.$store.state.login.username;
-//     if (!username && toPath === null) {
-//       next("/Login");
-//     } else {
-//       next();
-//     }
-//   }
-// });
-router.beforeEach((to, from, next) => {
-
-    next();
-  
-})
 export default router;

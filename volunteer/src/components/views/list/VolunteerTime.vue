@@ -27,7 +27,6 @@
               <el-table-column property="classNum" label="年级"></el-table-column>
               <el-table-column property="times" label="志愿次数"></el-table-column>
               <el-table-column property="longTime" label="志愿时长"></el-table-column>
-              <el-table-column property="score" label="平均评价分"></el-table-column>
             </el-table>
           </div>
           <div class="bottom-table">

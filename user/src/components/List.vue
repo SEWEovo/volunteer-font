@@ -3,7 +3,7 @@
     <div class="index">
       <el-tabs style="height:60px;" v-model="status" @tab-click="handleClick">
         <el-tab-pane label="全部" name="0"></el-tab-pane>
-        <el-tab-pane label="报名中" name="1"></el-tab-pane>
+        <el-tab-pane label="进行中" name="1"></el-tab-pane>
         <el-tab-pane label="已结束" name="2"></el-tab-pane>
       </el-tabs>
       <div
@@ -34,7 +34,7 @@
           <el-pagination
             @current-change="handleCurrentChange"
             :current-page.sync="cur"
-            :page-size="6"
+            :page-size="5"
             layout="total, prev, pager, next"
             :total="total"
           ></el-pagination>
@@ -44,7 +44,7 @@
     <div class="index-left">
       <div class="login-info">
         <div class="title">欢迎,</div>
-        <div v-if="this.$store.state.login.username==''" class="login-btn">
+        <div v-if="this.$store.state.login.username==null" class="login-btn">
           <el-button type="primary" @click="login()">登录</el-button>
         </div>
         <div class="info" v-else>
@@ -53,7 +53,7 @@
           <p>{{this.$store.state.login.college}}</p>
           <p>{{this.$store.state.login.profession}}{{this.$store.state.login.classNum}}</p>
           <div class="btn-group">
-            <el-button type @click="goRouter('basic')">个人中心</el-button>
+            <!-- <el-button type @click="goRouter('basic')">个人中心</el-button> -->
             <el-button type @click="logOut">退出登录</el-button>
           </div>
         </div>
@@ -118,31 +118,34 @@ export default {
       activitiesId: "",
       status: "0",
       datalist: [],
-      userInfo: {}
+      userInfo: {},
+      nowId: "",
     }
   },
   methods: {
     goRouter: function (item) {
       this.$router.push(item)
+      this.$store.commit("activeIndex", "4");
     },
     showInfo(data) {
       this.peopelData = data;
     },
     handleClick(tab, event) {
       this.status = tab.index;
+      this.cur = 1;
       this.getList();
     },
     logOut() {
-      this.$store.commit("username", "");
+      this.$store.commit("username", null);
       this.$store.commit("userId", "");
       this.$store.commit("phone", "");
       this.$store.commit("type", "");
     },
     apply: function (id) {
-      if (this.$store.state.login.username !== "") {
+      if (this.$store.state.login.username != null) {
         this.dialogVisible = true;
         this.changeTel = false;
-        this.activitiesId = id;
+        this.nowId = id;
       }
       else {
         this.$store.commit("loginVisible", true);
@@ -151,7 +154,7 @@ export default {
     signUp() {
       let info = {
         enterId: "",
-        activitesId: this.activitiesId,
+        activitesId: this.nowId,
         userId: this.$store.state.login.userId,
       }
       let params = {
@@ -177,7 +180,7 @@ export default {
         id: this.activitiesId,
         status: status
       }
-      this.$get('http://localhost:8880/Activities/getAll', params)//此处用post方法 url是我服务器中的一个接口
+      this.$get('http://localhost:8880/Activities/getAll', params)
         .then(res => {
           if (res.code === "ACK") {
             this.datalist = res.data;
@@ -199,7 +202,6 @@ export default {
 
     },
     showDetial: function (id, can) {
-      console.log(can)
       this.activitiesId = id;
       this.$router.push({ name: 'Detail', params: { activitiesId: this.activitiesId, can: can } })
     },
@@ -264,7 +266,7 @@ export default {
     }
     .btn-group {
       margin-top: 40px;
-      margin-left: 20px;
+      margin-left: 60px;
       .el-button {
         width: 80px;
         font-size: 14px;

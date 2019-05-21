@@ -6,6 +6,7 @@ Vue.use(Vuex)
 const state = {
   login: {
     loginVisible: false,
+    activeIndex:"1",
     username: window.sessionStorage.getItem("username"),
     // userId: "",
     userId:window.sessionStorage.getItem("userId"),
@@ -19,6 +20,10 @@ const state = {
 }
 
 const mutations = {
+  activeIndex(state, str) {
+    state.login.activeIndex = str;
+    window.sessionStorage.setItem("activeIndex",str)
+  },
   loginVisible(state, str) {
     state.login.loginVisible = str;
   },

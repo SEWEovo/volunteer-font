@@ -24,16 +24,16 @@
     <div class="index-left">
       <div class="login-info">
         <div class="title-left">欢迎,</div>
-        <div v-if="this.$store.state.login.username==''" class="login-btn">
+        <div v-if="this.$store.state.login.username==null" class="login-btn">
           <el-button type="primary" @click="login()">登录</el-button>
         </div>
         <div class="info" v-else>
           <p>{{this.$store.state.login.username}}</p>
           <p>{{this.$store.state.login.userId}}</p>
-          <p>{{this.$store.state.login.profession}}</p>
-          <p>{{this.$store.state.login.college}}{{this.$store.state.login.classNum}}</p>
+          <p>{{this.$store.state.login.college}}</p>
+          <p>{{this.$store.state.login.profession}}{{this.$store.state.login.classNum}}</p>
           <div class="btn-group">
-            <el-button type @click="goRouter('basic')">个人中心</el-button>
+            <!-- <el-button type @click="goRouter('basic')">个人中心</el-button> -->
             <el-button type @click="logOut">退出登录</el-button>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default {
         })
     },
     apply: function () {
-      if (this.$store.state.login.username !== "") {
+      if (this.$store.state.login.username != null) {
         this.dialogVisible = true;
         this.changeTel = false;
       }
@@ -133,7 +133,7 @@ export default {
       this.$router.go(-1);
     },
     logOut() {
-      this.$store.commit("username", "");
+      this.$store.commit("username", null);
       this.$store.commit("userId", "");
       this.$store.commit("phone", "");
       this.$store.commit("type", "");
@@ -215,7 +215,7 @@ export default {
     }
     .btn-group {
       margin-top: 40px;
-      margin-left: 20px;
+      margin-left: 60px;
       .el-button {
         width: 80px;
         font-size: 14px;

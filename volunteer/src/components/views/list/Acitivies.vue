@@ -40,7 +40,7 @@
               <el-table-column property="userStatus" label="状态" width="120px;">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.userStatus" :disabled="status==2">
-                    <el-option :value="0" label="报名中"></el-option>
+                    <el-option :value="0" label="报名成功"></el-option>
                     <el-option :value="2" label="已完成"></el-option>
                     <el-option :value="-1" label="未完成"></el-option>
                   </el-select>
@@ -54,6 +54,7 @@
   </div>
 </template>
 <script>
+import moment from "moment";
 export default {
   name: "Acitivies",
   data() {
@@ -68,6 +69,7 @@ export default {
       status: 0,
       scoreable: false,
       longtime: 0,
+      time: "",
     };
   },
   mounted() {
@@ -86,6 +88,9 @@ export default {
             this.value8 = res.data.activitesId;
             this.longtime = res.data.longtime;
             this.status = res.data.status;
+            this.time = res.data.time;
+            this.time = moment(this.time).format('YYYY-MM-DD HH:mm:ss');
+            this.time = new Date(Date.parse(this.time));
             let params = {
               activitesId: res.data.activitesId,
             }
@@ -119,6 +124,9 @@ export default {
           if (res2.code === "ACK") {
             this.longtime = res2.data[0].longtime;
             this.status = res2.data[0].status;
+            this.time = res2.data[0].time;
+            this.time = moment(this.time).format('YYYY-MM-DD HH:mm:ss');
+            this.time = new Date(Date.parse(this.time));
           }
         })
       //获取该活动名单
@@ -171,39 +179,45 @@ export default {
     },
     //一键更新学生的志愿情况
     update() {
-      for (var i = 0; i < this.tableData.length; i++) {
-        this.tableData[i].year = new Date().getFullYear();
-        this.tableData[i].status = this.tableData[i].userStatus
-        if (this.tableData[i].userStatus == 2) {
-          this.tableData[i].longtime = this.longtime;
-        }
-        else {
-          this.tableData[i].longtime = 0;
-        }
+      let now = new Date();
+      if (now <this.time) {
+        this.$message("活动未结束")
       }
-      let params = {
-        info: JSON.stringify(this.tableData)
-      }
-      //更新
-      this.$post('http://localhost:8880/enter/updateAll', params)
-        .then(res => {
-          if (res.code === "ACK") {
-            let params = {
-              id: this.value8,
-            };
-            //更新活动状态
-            this.$post("http://localhost:8880/Activities/updateStatus", params)
-              .then(res => {
-                if (res.code === "ACK") {
-                  this.$message.success("更新成功");
-                  this.getList();
-                }
-              })
-              .catch(() => { });
+      else {
+        for (var i = 0; i < this.tableData.length; i++) {
+          this.tableData[i].year = new Date().getFullYear();
+          this.tableData[i].status = this.tableData[i].userStatus
+          if (this.tableData[i].userStatus == 2) {
+            this.tableData[i].longtime = this.longtime;
           }
-        })
-        .catch(() => {
-        })
+          else {
+            this.tableData[i].longtime = 0;
+          }
+        }
+        let params = {
+          info: JSON.stringify(this.tableData)
+        }
+        //更新
+        this.$post('http://localhost:8880/enter/updateAll', params)
+          .then(res => {
+            if (res.code === "ACK") {
+              let params = {
+                id: this.value8,
+              };
+              //更新活动状态
+              this.$post("http://localhost:8880/Activities/updateStatus", params)
+                .then(res => {
+                  if (res.code === "ACK") {
+                    this.$message.success("更新成功");
+                    this.getList();
+                  }
+                })
+                .catch(() => { });
+            }
+          })
+          .catch(() => {
+          })
+      }
     },
     onExport() {
       this.$confirm("此操作将导出excel文件, 是否继续?", "提示", {

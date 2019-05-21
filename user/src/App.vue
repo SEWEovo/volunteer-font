@@ -2,11 +2,16 @@
   <div id="app">
     <el-container>
       <el-header>
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          @select="handleSelect"
+        >
           <el-menu-item index="1" @click="goRouter('/')">首页</el-menu-item>
           <el-menu-item index="2" @click="goRouter('list')">志愿活动</el-menu-item>
           <el-menu-item index="3" @click="goRouter('publicity')">信息公示</el-menu-item>
-          <el-submenu index="4" v-if="this.$store.state.login.username !=''">
+          <el-submenu index="4" v-if="this.$store.state.login.username !=null">
             <template slot="title">个人中心</template>
             <el-menu-item index="4-1" @click="goRouter('basic')">基本资料</el-menu-item>
             <el-menu-item index="4-2" @click="goRouter('history')">报名历史</el-menu-item>
@@ -14,9 +19,7 @@
         </el-menu>
       </el-header>
       <el-main>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <router-view></router-view>
       </el-main>
     </el-container>
   </div>
@@ -26,16 +29,19 @@ export default {
   name: 'App',
   data() {
     return {
-      activeIndex: "1",
+      activeIndex: this.$store.state.login.activeIndex,
     }
   },
   methods: {
     goRouter: function (item) {
       this.$router.push(item)
     },
+    handleSelect(key) {
+      this.$store.commit("activeIndex",key.toString());
+    },
     login() {
       this.$store.commit("loginVisible", true);
-    }
+    },
   },
 }
 </script>
